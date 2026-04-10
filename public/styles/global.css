@@ -1,0 +1,26 @@
+/* src/styles/global.css */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #6a0dad;
+    --secondary-color: #ffcc00;
+    --font-family: 'Arial', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--primary-color);
+    color: white;
+    font-family: var(--font-family);
+}
+
+header {
+    width: 100%;
+    margin: 0;
+    left: 0;
+    right: 0;
+}

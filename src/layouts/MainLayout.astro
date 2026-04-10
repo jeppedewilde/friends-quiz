@@ -1,0 +1,20 @@
+---
+import Header from '../components/Header.astro';
+const { title } = Astro.props;
+---
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{ title }</title>
+    <link rel="stylesheet" href="/styles/global.css">
+</head>
+<body>
+    <Header />
+    <h1>{title}</h1>
+    <main>
+        <slot /> <!-- your content is injected here -->
+    </main>
+</body>
+
+</html>

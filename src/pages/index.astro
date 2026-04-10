@@ -1,17 +1,45 @@
 ---
+import MainLayout from "../layouts/MainLayout.astro";
 
 ---
+<MainLayout title="The One With The Quiz">
+    <body>
+        <div class="intro">
+            <p>Are you the ultimate Friends fan? Test your knowledge!</p>
+            
+            <a href="/quiz" class="start-knop">Start the Quiz</a>
+        </div>
+    </body>
+</MainLayout>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<style>
+	body {
+		background-color: black;
+		color: white;
+		font-family: Arial, sans-serif;
+		margin: 0;
+		padding: 2rem;
+	}
+	
+	.intro {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+
+	.start-knop {
+		display: inline-block;
+		background-color: var(--secondary-color);
+		color: black;
+		font-weight: bold;
+		text-decoration: none;
+		padding: 1rem 2rem;
+		border-radius: 8px;
+		margin-top: 1rem;
+		font-size: 1.2rem;
+		transition: transform 0.2s;
+	}
+
+	.start-knop:hover {
+		transform: scale(1.05);
+	}
+</style>

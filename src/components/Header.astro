@@ -1,0 +1,55 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header>
+    <a href="/">The One With The Quiz</a>
+    <nav>
+        <ul>
+            <li>
+                <a href="/" class={currentPath === '/' ? 'active' : ''}>Home</a>
+            </li>
+            <li>
+                <a href="/quiz" class={currentPath === '/quiz' ? 'active' : ''}>Quiz</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        background-color: #111;
+        border-bottom: 2px solid #222;
+
+    ul {
+        display: flex;
+        gap: 1rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    a {
+        text-decoration: none;
+        color: #e0e0e0;
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem; 
+        border-radius: 8px;
+    }
+
+    a:hover {
+        background-color: rgba(255, 204, 0, 0.1); 
+        color: #ffcc00; 
+    }
+
+    .active {
+        background-color: #ffcc00;
+        color: #111;
+    }
+}
+</style>

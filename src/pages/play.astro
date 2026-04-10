@@ -1,0 +1,102 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout>
+    <div class="quiz-container">
+
+        <div id="loginScherm" class="login-container">
+            <input 
+                type="text" 
+                id="spelerNaam" 
+                class="name-input" 
+                placeholder="Typ je naam (bijv. Joey)" 
+            />
+            <button id="joinBtn" class="join-button">
+                Doe mee!
+            </button>
+        </div>
+
+        <h2 id="wachtScherm" class="waiting-screen hidden">
+            Wachten op de host...
+        </h2>
+    </div>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:8081');
+
+        ws.onopen = () => {
+            console.log('Verbonden met de lobby!');
+        };
+
+        document.getElementById('joinBtn')?.addEventListener('click', () => {
+            const naamInput = document.getElementById('spelerNaam') as HTMLInputElement;
+            const spelerNaam = naamInput.value;
+
+            ws.send(`Nieuwe speler: ${spelerNaam}`);
+
+            document.getElementById('loginScherm')?.classList.add('hidden');
+            document.getElementById('wachtScherm')?.classList.remove('hidden');
+        });
+    </script>
+</MainLayout>
+
+<style>
+    .quiz-container {
+        text-align: center;
+        margin-top: 2rem;
+        padding: 1rem;
+    }
+
+    h1 {
+        margin-bottom: 2rem;
+    }
+
+    .login-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .name-input {
+        padding: 12px;
+        font-size: 1.1rem;
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+    }
+
+    .name-input:focus {
+        border-color: #333;
+    }
+
+    .join-button {
+        padding: 12px 24px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        background-color: var(--secondary-color);
+        color: black;
+        border: none;
+        border-radius: 8px;
+        transition: background-color 0.2s;
+    }
+
+    .join-button:hover {
+        scale: 1.1;
+        transition: all 0.2s;
+    }
+
+    .waiting-screen {
+        color: var(--secondary-color); 
+        margin-top: 2rem;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>

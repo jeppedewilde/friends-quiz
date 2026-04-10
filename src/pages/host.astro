@@ -1,0 +1,36 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout>
+    <h1>Host scherm 💻</h1>
+
+    <input type="text" id="message" placeholder="Type a message">
+    <button id="send">Send</button>
+    <div id="messages"></div>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:8081');
+
+        ws.onopen = () => {
+            console.log('Connected to server');
+        };
+
+        ws.onmessage = (event) => {
+            const messages = document.getElementById('messages') as HTMLElement;
+            const newMessage = document.createElement('div');
+            newMessage.textContent = `Server: ${event.data}`;
+            messages.appendChild(newMessage);
+        };
+
+        ws.onclose = () => {
+            console.log('Disconnected from server');
+        };
+
+        document.getElementById('send').addEventListener('click', () => {
+            const input = document.getElementById('message') as HTMLInputElement;
+            ws.send(input.value);
+            input.value = '';
+        });
+    </script>
+</MainLayout>

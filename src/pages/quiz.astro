@@ -1,0 +1,67 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+
+const apiKey = import.meta.env.TMDB_API_KEY;
+
+// Hoeveelheid afleveringen per seizoen
+const afleveringenPerSeizoen = [24, 24, 25, 24, 24, 25, 24, 24, 24, 18];
+
+// Kies random seizoen
+const randomSeizoen = Math.floor(Math.random() * 10) + 1;
+
+// Check hoeveel afleveringen dat seizoen heeft 
+const maxAfleveringen = afleveringenPerSeizoen[randomSeizoen - 1];
+
+// Kies random aflevering in dat seizoen
+const randomAflevering = Math.floor(Math.random() * maxAfleveringen) + 1;
+
+// Link naar alle seizoenen en afleveringen?
+const url = `https://api.themoviedb.org/3/tv/1668/season/${randomSeizoen}/episode/${randomAflevering}?api_key=${apiKey}&language=en-US`;
+
+// Show in terminal
+const responseFRIENDS = await fetch(url);
+const seizoenData = await responseFRIENDS.json();
+console.log(seizoenData);
+
+// Fetch de data
+const response = await fetch(url);
+const data = await response.json();
+
+const afleveringTitel = data.name;
+const omschrijving = data.overview;
+
+// Haal plaatje op
+const plaatjeUrl = data.still_path
+	? `https://image.tmdb.org/t/p/w500${data.still_path}`
+	: 'https://placehold.co/600x400/6a0dad/FFF?text=Geen+Afbeelding+Gevonden'; 
+---
+
+<MainLayout title="Quiz time">		
+		<h2>{afleveringTitel}</h2>
+		
+		<img src={plaatjeUrl} alt="Friends Screenshot" />
+
+		<p>"{omschrijving}"</p>
+</MainLayout>
+
+
+<style>
+	body {
+		background-color: var(--primary-color);
+		color: white;
+		font-family: var(--font-family);
+		text-align: center;
+		padding: 2rem;
+	}
+	img {
+		border-radius: 10px;
+		border: 5px solid var(--secondary-color);
+		max-width: 100%;
+		height: auto;
+	}
+	p {
+		max-width: 600px;
+		margin: 20px auto;
+		font-style: italic;
+	}
+	</style>

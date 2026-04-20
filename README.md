@@ -17,7 +17,7 @@ No excuses > Kies een reden waarom je niet wil gaan sporten en een coach schreeu
 
 ### Idee 2
 Friends quiz!
-TMDB API voor content, web API om met vrienden te spelen.
+TMDB API voor content, web socket API om met vrienden te spelen.
 Game modes: Seizoen/aflevering raden, quote raden, 'wie zei dit' raden.
 
 # Week 1
@@ -54,7 +54,12 @@ Ik heb geprobeerd meer te leren over Speech API en hoe ik dat kan aanpakken maar
 Volgende keer ga ik verder met het uitwerken van mijn idee en hoe ik de Speech API kan aanpakken!
 
 ## Voortangsgesprek 1
+Tijdens het eerste voortgangsgesprek vertelde ik over mijn idee en kreeg ik van iedereen feedback. Alexia gaf de feedback om er een beloning aan te hangen ipv alleen te straffen en Kerr en Cyd waren best positief over mijn idee. Cyd gaf de tips om inspiratie op te doen voor de styling en te bedenken hoe ik de stem van de coach wilde visualiseren.
+
 ## Weekvoortgang week 1
+Deze eerste week van API ben ik best positief. Het voelt als een opdracht waar veel vrijheid is om iets te maken wat ik zelf gaaf vind en dat geeft mij energie. Ik merk wel dat ik nog een beetje moet inkomen omdat mijn idee moet nog wat meer vorm moet krijgen en ik nog een beetje moet wennen aan werken met Astro. Maar dat komt volgende week vast goed!
+
+Tot nu toe heb ik een beginnetje gemaakt en vooral bezig geweest met het uitwerken van mijn idee en mijn weg vinden binnen het Astro framework.
 
 # Week 2
 ## Woensdag 
@@ -87,10 +92,15 @@ Morgen ga ik verder met de content van mijn API en kijken hoe ik daar een quiz v
 Hoe ik een web socket API opzet.
 
 ### Wat ga ik de volgende keer doen?
-
+De volgende keer ga ik verder met de web socket API om die helemaal werkend te krijgen. Pas als dat gelukt is ga ik mijn tweede content API inladen en uitozeken hoe ik dynamische vragen kan maken met de content uit de API's.
 
 ## Voortangsgesprek 2
+In dit tweede voortgangsgesprek heb ik verteld wat mijn nieuwe idee was want ik had dit alleen nog met Cyd besproken en iedereen reageerde heel enthousiast. Ik heb laten zien hoe ver ik nu ben met de web socket API en ook over die voortgang waren de anderen positief. Ik kreeg van Kerr de tip om te zorgen voor structuur in wat de server binnenhaalt: Nu staat er in de terminal van de server alleen "Nieuwe speler: [naam]", om deze namen op te slaan en later te gebruiker moeten ze worden opgeslagen in een array.
+
 ## Weekvoortgang week 2
+Deze tweede week begon ik met tegenzin, want over het weekend was ik steeds minder enthousiast geworden over mijn idee. Ik besloot na het opstarten van de dag eigenlijk meteen om niet langer te blijven hangen op een idee waar ik niet enthousiast over was en wat nieuws te verzinnen. Ik was eerst een tijdje compleet inspiratieloos en toen ben ik gaan nadenken over iets waar ik écht enthouasiast over ben, en dat is de serie Friends! Ik vormde een idee om daar een quiz van te maken die je kan spelen samen met je vrienden en heb mijn nieuwe idee aan Cyd voorgelegd. Ik mocht hiermee verder mits ik een web socket API zou gebruiken dus daarmee ben ik meteen aan de slag gegaan. Het begin is er, hopelijk volgende week grote stappen zetten.
+
+
 
 # Week 3
 ## Woensdag 

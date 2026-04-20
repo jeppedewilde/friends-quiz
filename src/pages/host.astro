@@ -7,7 +7,22 @@ import MainLayout from '../layouts/MainLayout.astro';
 
     <input type="text" id="message" placeholder="Type a message">
     <button id="send">Send</button>
+    <button id="startGameBtn">Start</button>
     <div id="messages"></div>
+
+    <div id="vraagScherm" class="hidden">
+        <h2>Welke aflevering is dit?</h2>
+        <img id="vraagAfbeelding" src="" alt="Aflevering">
+        
+        <div id="hostOpties">
+            </div>
+
+        <h3 id="hostUitslagTekst" class="hidden" style="font-size: 2rem; color: var(--secondary-color);"></h3>
+
+        <button id="nextBtn" class="hidden">
+            Volgende vraag ➡️
+        </button>
+    </div>
 
     <script>
         const ws = new WebSocket('ws://localhost:8081');
@@ -16,11 +31,124 @@ import MainLayout from '../layouts/MainLayout.astro';
             console.log('Connected to server');
         };
 
-        ws.onmessage = (event) => {
-            const messages = document.getElementById('messages') as HTMLElement;
-            const newMessage = document.createElement('div');
-            newMessage.textContent = `Server: ${event.data}`;
-            messages.appendChild(newMessage);
+        ws.onmessage = async (event) => {
+            try {
+                // 1. We pakken de data en zorgen dat het áltijd leesbare tekst is
+                let tekstData = event.data;
+                if (tekstData instanceof Blob) tekstData = await tekstData.text();
+
+                // envelop uitpakken
+                const envelop = JSON.parse(tekstData);
+
+                // is het een update van de spelerslijst?
+                if (envelop.type === 'spelers_update') {
+                    const messages = document.getElementById('messages') as HTMLElement;
+                    messages.innerHTML = ''; // maak eerst leeg
+                
+                    envelop.spelerLijst.forEach((speler) => {
+                        const newMessage = document.createElement('div');
+                        newMessage.textContent = `Speler in de game: ${speler}`;
+                        messages.appendChild(newMessage);
+                    });
+                }
+
+                else if (envelop.type === 'nieuwe_vraag') {
+                    // verberg volgende knop tijdens het beantwoorden
+                    document.getElementById('nextBtn')?.classList.add('hidden');
+
+                    // laat het vraag scherm zien
+                    document.getElementById('vraagScherm')?.classList.remove('hidden');
+
+                    const titelElement = document.querySelector('#vraagScherm h2');
+                    const afbeeldingElement = document.getElementById('vraagAfbeelding');
+                    const optiesContainer = document.getElementById('hostOpties');
+                    const uitslagTekst = document.getElementById('hostUitslagTekst');
+
+                    // reset alles
+                    optiesContainer.innerHTML = '';
+                    uitslagTekst.classList.add('hidden');
+
+                    // sla type op in de window
+                    window.huidigeVraagSoort = envelop.vraagSoort;
+
+                    if (envelop.vraagSoort === 'mc_titels') {
+                        titelElement.textContent = 'Welke aflevering is dit?';
+                        afbeeldingElement.src = envelop.afbeelding;
+                        afbeeldingElement.classList.remove('hidden');
+                        
+                        envelop.opties.forEach((optieTekst, index) => {
+                            const knop = document.createElement('div');
+                            knop.classList.add('host-optie-knop', `kleur-${index}`);
+                            knop.textContent = optieTekst;
+                            optiesContainer.appendChild(knop);
+                        });
+                    }
+
+                    else if (envelop.vraagSoort === 'mc_plaatjes') {
+                        titelElement.textContent = envelop.titel;
+                        afbeeldingElement.classList.add('hidden'); // Verberg de grote foto!
+                        
+                        envelop.opties.forEach((optieUrl, index) => {
+                            const knop = document.createElement('div');
+                            knop.classList.add('host-optie-knop', `kleur-${index}`);
+                            knop.style.backgroundImage = `url(${optieUrl})`;
+                            knop.style.backgroundSize = 'cover';
+                            knop.style.backgroundPosition = 'center';
+                            knop.style.height = '200px'; 
+                            optiesContainer.appendChild(knop);
+                        });
+                    }
+
+                    else if (envelop.vraagSoort === 'open_seizoen') {
+                        titelElement.textContent = `Uit welk seizoen komt: ${envelop.titel}?`;
+                        afbeeldingElement.src = envelop.afbeelding;
+                        afbeeldingElement.classList.remove('hidden');
+                    }
+                }
+                //     // zet de afbeelding erin
+                //     document.getElementById('vraagAfbeelding').src = envelop.afbeelding;
+
+                //     // 4 kleuren
+                //     const kleuren = ['#e21b3c', '#1368ce', '#d89e00', '#26890c'];
+
+                //     // maak 4 lege blokken
+                //     const optiesContainer = document.getElementById('hostOpties');
+                //     optiesContainer.innerHTML = ''; 
+
+                //     // voor elke optie: maak een blokje, zet de tekst erin, en kleur het
+                //     envelop.opties.forEach((optieTekst, index) => {
+                //         const knop = document.createElement('div');
+                //         knop.classList.add('host-optie-knop', `kleur-${index}`);
+                //         knop.textContent = optieTekst;
+                //         optiesContainer.appendChild(knop);
+                //     })
+                // }
+
+                else if (envelop.type === 'ronde_uitslag_host') {
+                    if (window.huidigeVraagSoort === 'open_seizoen') {
+                        const uitslagTekst = document.getElementById('hostUitslagTekst');
+                        uitslagTekst.textContent = `Het juiste antwoord was: Seizoen ${envelop.juisteAntwoord}`;
+                        uitslagTekst.classList.remove('hidden');
+                    } else {
+                        const knoppen = document.getElementById('hostOpties').children;
+
+                        // maak foute antwoorden doorzichtig en highlight het juiste antwoord
+                        for (let i = 0; i < knoppen.length; i++) {
+                            if (i !== envelop.juisteIndex) {
+                                knoppen[i].classList.add('fout-antwoord');
+                            } else {
+                                knoppen[i].classList.add('goed-antwoord');
+                            }
+                        }
+                    }
+
+                    console.log("Huidige scores:", envelop.scores);
+                    document.getElementById('nextBtn')?.classList.remove('hidden');
+                }
+
+            } catch (error) {
+                console.error('Fout bij uitpakken data:', error);
+            }
         };
 
         ws.onclose = () => {
@@ -29,8 +157,101 @@ import MainLayout from '../layouts/MainLayout.astro';
 
         document.getElementById('send').addEventListener('click', () => {
             const input = document.getElementById('message') as HTMLInputElement;
-            ws.send(input.value);
+            
+            // maak envelop
+            const envelop = {
+                type: 'host_bericht',
+                tekst: input.value
+            };
+            
+            ws.send(JSON.stringify(envelop));
             input.value = '';
+        });
+
+        // start spel knop
+        document.getElementById('startGameBtn').addEventListener('click', () => {
+            const envelop = {
+                type: 'start_game'
+            };
+            ws.send(JSON.stringify(envelop));
+        });
+
+        // volgende vraag knop
+        document.getElementById('nextBtn')?.addEventListener('click', () => {
+            const envelop = {
+                type: 'start_game'
+            };
+            ws.send(JSON.stringify(envelop));
         });
     </script>
 </MainLayout>
+
+<style is:global>
+    #startGameBtn {
+        background-color: var(--secondary-color);
+        color: black;
+        font-weight: 600;
+        border: none;
+        padding: 10px;
+        margin-top: 20px; 
+    }
+
+    #startGameBtn:hover {
+        cursor: pointer;
+        transform: scale(1.05);
+    }
+
+    #vraagScherm {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    #vraagAfbeelding {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+
+    #hostOpties {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .host-optie-knop {
+        color: white;
+        padding: 10px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+
+    .kleur-0 { background-color: #e21b3c; }
+    .kleur-1 { background-color: #1368ce; }
+    .kleur-2 { background-color: #d89e00; }
+    .kleur-3 { background-color: #26890c; }
+    
+    .fout-antwoord { opacity: 0.3; }
+    .goed-antwoord { transform: scale(1.05); border: 4px solid white; box-shadow: 0 0 15px white;}
+
+    #nextBtn {
+        margin-top: 30px;
+        padding: 12px 24px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        background-color: var(--secondary-color);
+        color: black;
+        border: none;
+        border-radius: 8px;
+        transition: background-color 0.2s;
+    }
+
+</style>

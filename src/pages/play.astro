@@ -20,6 +20,20 @@ import MainLayout from '../layouts/MainLayout.astro';
         <h2 id="wachtScherm" class="waiting-screen hidden">
             Wachten op de host...
         </h2>
+
+        <div id="gameScherm" class="hidden">
+            <h2 id="kijkNaarScherm">Kijk naar het grote scherm!</h2>
+            <div class="antwoord-knoppen">
+                <button class="antwoord-knop" data-index="0" style="background-color: #e21b3c;"></button>
+                <button class="antwoord-knop" data-index="1" style="background-color: #1368ce;"></button>
+                <button class="antwoord-knop" data-index="2" style="background-color: #d89e00;"></button>
+                <button class="antwoord-knop" data-index="3" style="background-color: #26890c;"></button>
+            </div>
+            <div id="openVraagContainer" class="hidden" style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px;">
+                <input type="number" id="openAntwoordInput" class="name-input" placeholder="Seizoennummer...">
+                <button id="stuurOpenBtn" class="join-button">Verstuur Antwoord</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -29,19 +43,119 @@ import MainLayout from '../layouts/MainLayout.astro';
             console.log('Verbonden met de lobby!');
         };
 
+        ws.onmessage = async (event) => {
+            try {
+                let data = event.data;
+                if (data instanceof Blob) data = await data.text();
+                
+                const envelop = JSON.parse(data);
+
+                // Als de server zegt dat de naam fout is (leeg of bezet):
+                if (envelop.type === 'login_fout') {
+                    // Laat een simpele pop-up zien met de foutmelding
+                    alert(envelop.bericht); 
+                } 
+
+                // Als de server zegt dat alles klopt:
+                else if (envelop.type === 'login_succes') {
+                    // NU PAS wisselen we van scherm!
+                    document.getElementById('loginScherm')?.classList.add('hidden');
+                    document.getElementById('wachtScherm')?.classList.remove('hidden');
+                }
+
+                // Als de server zegt dat het spel is gestart:
+                else if (envelop.type === 'nieuwe_vraag') {
+                    // verberg alles standaard
+                    document.getElementById('wachtScherm')?.classList.add('hidden');
+                    document.querySelector('.antwoord-knoppen').classList.add('hidden');
+                    document.getElementById('openVraagContainer').classList.add('hidden');
+                    
+                    document.getElementById('kijkNaarScherm').textContent = 'Kijk naar het grote scherm!';
+                    document.getElementById('gameScherm')?.classList.remove('hidden');
+                    document.body.classList.remove('scherm-goed', 'scherm-fout');
+                    
+                    // laat de juiste besturing zien op basis van het type vraag
+                    if (envelop.vraagSoort === 'open_seizoen') {
+                        document.getElementById('openVraagContainer').classList.remove('hidden');
+                        document.getElementById('openAntwoordInput').value = ''; // Reset het invulveld
+                    } else {
+                        document.querySelector('.antwoord-knoppen').classList.remove('hidden');
+                    }
+                }
+
+                else if (envelop.type === 'ronde_uitslag_speler') {
+                    // verberg de knoppen weer
+                    document.querySelector('.antwoord-knoppen').classList.add('hidden');
+
+                    // verberg het open vraag veld
+                    document.getElementById('openVraagContainer').classList.add('hidden');
+
+                    const tekst = document.getElementById('kijkNaarScherm');
+                    if (envelop.isGoed) {
+                        tekst.innerHTML = `GOED! Het juiste antwoord was inderdaad ${envelop.juisteAntwoord}!<br><br>+100 punten!<br><br>Jouw score: <strong>${envelop.jouwScore} punten</strong>`;
+                        document.body.classList.add('scherm-goed');
+                    } else {
+                        tekst.innerHTML = `FOUT! Het juiste antwoord was: ${envelop.juisteAntwoord}<br><br>Jouw score: <strong>${envelop.jouwScore} punten</strong>`;
+                        document.body.classList.add('scherm-fout');
+                    }
+
+                }
+
+            } catch (error) {
+                console.error('Fout bij het lezen van bericht:', error);
+            }
+        };
+
         document.getElementById('joinBtn')?.addEventListener('click', () => {
-            const naamInput = document.getElementById('spelerNaam') as HTMLInputElement;
+            const naamInput = document.getElementById('spelerNaam');
             const spelerNaam = naamInput.value;
 
-            ws.send(`Nieuwe speler: ${spelerNaam}`);
+            const envelop = {
+                type: 'nieuwe_speler',
+                naam: spelerNaam // of hoe jouw variabele voor de naam ook heet!
+            };
+            ws.send(JSON.stringify(envelop));
+        });
 
-            document.getElementById('loginScherm')?.classList.add('hidden');
-            document.getElementById('wachtScherm')?.classList.remove('hidden');
+        // luister naar klikken op 4 knoppen
+        const antwoordKnoppen = document.querySelectorAll('.antwoord-knop');
+
+        antwoordKnoppen.forEach((knop) => {
+            knop.addEventListener('click', (event) => {
+                // haal nummer van knop op (0-3)
+                const gekozenIndex = event.target.getAttribute('data-index');
+
+                // maak envelop voor server
+                const envelop = {
+                    type: 'speler_antwoord',
+                    gekozenIndex: parseInt(gekozenIndex)
+                }
+
+                ws.send(JSON.stringify(envelop));
+                console.log('Antwoord verzonden:', envelop);
+
+                // verander tekst zodat speler weet dat antwoord is verzonden
+                document.getElementById('kijkNaarScherm').textContent = 'Antwoord verzonden! Wachten op de rest...';
+            });
+        });
+
+        // luister naar verzenden van open vraag
+        document.getElementById('stuurOpenBtn')?.addEventListener('click', () => {
+            const input = document.getElementById('openAntwoordInput');
+            
+            const envelop = {
+                type: 'speler_antwoord',
+                gekozenAntwoord: input.value
+            };
+            ws.send(JSON.stringify(envelop));
+            
+            document.getElementById('kijkNaarScherm').textContent = 'Antwoord verzonden! Wachten op de rest...';
+            document.getElementById('openVraagContainer').classList.add('hidden');
         });
     </script>
 </MainLayout>
 
-<style>
+<style is:global>
     .quiz-container {
         text-align: center;
         margin-top: 2rem;
@@ -97,6 +211,39 @@ import MainLayout from '../layouts/MainLayout.astro';
     }
 
     .hidden {
-        display: none;
+        display: none !important;
+    }
+
+    #gameScherm {
+        width: 100%;
+        height: 60vh;
+    }
+
+    .antwoord-knoppen {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 10px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .antwoord-knop {
+        border: none;
+        border-radius: 8px;
+        background-color: var(--secondary-color);
+        color: black;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .scherm-goed {
+        background-color: var(--secondary-color) !important;
+        transition: background-color 0.3s;
+    }
+    .scherm-fout {
+        background-color: #e21b3c; 
+        color: white;
+        transition: background-color 0.3s;
     }
 </style>

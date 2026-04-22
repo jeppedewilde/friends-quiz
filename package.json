@@ -12,6 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/node": "^10.0.5",
     "astro": "^6.1.4",
     "dotenv": "^17.4.2",
     "ws": "^8.20.0"

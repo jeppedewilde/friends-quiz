@@ -1,0 +1,82 @@
+<div id="gameScherm" class="hidden">
+    <h2 id="kijkNaarScherm">Kijk naar het grote scherm!</h2>
+    
+    <div class="antwoord-knoppen">
+        <button class="antwoord-knop knop-rood" data-index="0"></button>
+        <button class="antwoord-knop knop-blauw" data-index="1"></button>
+        <button class="antwoord-knop knop-geel" data-index="2"></button>
+        <button class="antwoord-knop knop-groen" data-index="3"></button>
+    </div>
+
+    <div id="openVraagContainer" class="hidden open-container">
+        <input type="number" id="openAntwoordInput" class="name-input" placeholder="Seizoennummer...">
+        <button id="stuurOpenBtn" class="join-button">Verstuur Antwoord</button>
+    </div>
+</div>
+
+<style>
+    #gameScherm { 
+        width: 100%; 
+        height: 60vh; 
+    }
+    
+    .antwoord-knoppen {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 10px;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .antwoord-knop {
+        border: none;
+        border-radius: 8px;
+        color: black;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    /* Kleuren nu netjes in CSS in plaats van inline */
+    .knop-rood { 
+        background-color: #e21b3c; 
+    }
+    .knop-blauw { 
+        background-color: #1368ce; 
+    }
+    .knop-geel { 
+        background-color: #d89e00; 
+    }
+    .knop-groen { 
+        background-color: #26890c; 
+    }
+
+    .open-container {
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        gap: 15px; 
+        margin-top: 20px;
+    }
+
+    .name-input {
+        padding: 12px; 
+        font-size: 1.1rem; 
+        width: 100%; 
+        max-width: 300px; 
+        text-align: center; 
+        border: 2px solid #ccc; 
+        border-radius: 8px;
+    }
+
+    .join-button {
+        padding: 12px 24px; 
+        font-size: 1.1rem; 
+        font-weight: bold; 
+        cursor: pointer;
+        background-color: var(--secondary-color); 
+        color: black; 
+        border: none; 
+        border-radius: 8px;
+    }
+</style>

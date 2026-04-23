@@ -1,0 +1,145 @@
+<div id="vraagScherm" class="hidden">
+    <div class="vraag-header">
+        <span id="vraagTeller"></span>
+        <div class="timer-container">
+            <div id="timerBalk"></div>
+        </div>
+    </div>
+    
+    <h2>Welke aflevering is dit?</h2>
+    <img id="vraagAfbeelding" src="" alt="Aflevering">
+    
+    <div id="hostOpties"></div>
+    <h3 id="hostUitslagTekst" class="hidden uitslag-tekst"></h3>
+
+    <button id="nextBtn" class="hidden">Volgende vraag</button>
+    <button id="tussenstandBtn" class="hidden tussenstand-btn">Tussenstand</button>
+    <button id="eindscoreBtn" class="hidden eindscore-btn">Eindscore</button>
+</div>
+
+<style>
+    #vraagScherm {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    #vraagAfbeelding {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+
+    #hostOpties {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    :global(.host-optie-knop) {
+        color: white;
+        padding: 10px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+
+    /* Kleuren en states */
+    :global(.kleur-0) { 
+        background-color: #e21b3c; 
+    }
+    :global(.kleur-1) { 
+        background-color: #1368ce; 
+    }
+    :global(.kleur-2) { 
+        background-color: #d89e00; 
+    }
+    :global(.kleur-3) { 
+        background-color: #26890c; 
+    }
+    
+    :global(.fout-antwoord) { 
+        opacity: 0.3; 
+    }
+    
+    :global(.goed-antwoord) { 
+        transform: scale(1.05); 
+        border: 4px solid white; 
+        box-shadow: 0 0 15px white;
+    }
+
+    /* Styling voor de knoppen en tekst onderaan */
+    #nextBtn {
+        margin-top: 30px;
+        padding: 12px 24px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        background-color: var(--secondary-color);
+        color: black;
+        border: none;
+        border-radius: 8px;
+        transition: background-color 0.2s;
+    }
+
+    .uitslag-tekst {
+        font-size: 2rem; 
+        color: var(--secondary-color);
+    }
+
+    .eindscore-btn {
+        margin-top: 30px; 
+        padding: 15px 30px; 
+        font-size: 1.2rem; 
+        background-color: #d89e00; 
+        border: none; 
+        border-radius: 8px; 
+        font-weight: bold; 
+        cursor: pointer;
+    }
+
+    .vraag-header {
+        max-width: 800px;
+        margin: 0 auto 20px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #vraagTeller {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .timer-container {
+        width: 100%;
+        height: 12px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    #timerBalk {
+        width: 100%;
+        height: 100%;
+        background-color: var(--secondary-color);
+    }
+
+    .tussenstand-btn {
+        margin-top: 30px;
+        padding: 12px 24px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        background-color: #1368ce;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        margin-left: 10px;
+    }
+    
+</style>

@@ -37,7 +37,6 @@ async function fetchEpisode(apiKey) {
     }
 
     return afleveringData;
-
 }
 
 // hussel de lijst
@@ -46,7 +45,6 @@ function husselLijst(lijst) {
 }
 
 // vragen genereren
-
 // TYPE 1: plaatje met 4 titels (multiple choice)
 export async function genereerVraagType1(apiKey) {
     // haal 4 afleveringen op (Promise.all zorgt dat ze tegelijk opgehaald worden)

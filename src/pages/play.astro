@@ -1,43 +1,41 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+
+import Login from '../components/play/Login.astro';
+import WachtScherm from '../components/play/WachtScherm.astro';
+import Controller from '../components/play/Controller.astro';
+import RondeUitslag from '../components/play/RondeUitslag.astro';
+import EindScherm from '../components/play/EindScherm.astro';
 ---
 
 <MainLayout>
-    <div class="quiz-container">
-
-        <div id="loginScherm" class="login-container">
-            <input 
-                type="text" 
-                id="spelerNaam" 
-                class="name-input" 
-                placeholder="Typ je naam (bijv. Joey)" 
-            />
-            <button id="joinBtn" class="join-button">
-                Doe mee!
-            </button>
-        </div>
-
-        <h2 id="wachtScherm" class="waiting-screen hidden">
-            Wachten op de host...
-        </h2>
-
-        <div id="gameScherm" class="hidden">
-            <h2 id="kijkNaarScherm">Kijk naar het grote scherm!</h2>
-            <div class="antwoord-knoppen">
-                <button class="antwoord-knop" data-index="0" style="background-color: #e21b3c;"></button>
-                <button class="antwoord-knop" data-index="1" style="background-color: #1368ce;"></button>
-                <button class="antwoord-knop" data-index="2" style="background-color: #d89e00;"></button>
-                <button class="antwoord-knop" data-index="3" style="background-color: #26890c;"></button>
-            </div>
-            <div id="openVraagContainer" class="hidden" style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px;">
-                <input type="number" id="openAntwoordInput" class="name-input" placeholder="Seizoennummer...">
-                <button id="stuurOpenBtn" class="join-button">Verstuur Antwoord</button>
-            </div>
-        </div>
+    <div>
+        <Login />
+        <WachtScherm />
+        <Controller />
+        <RondeUitslag />
+        <EindScherm />
     </div>
-
+    
     <script>
         const ws = new WebSocket('ws://localhost:8081');
+
+        // mag standaard niet antwoorden
+        let magAntwoorden = false;
+
+        // verkeersregelaar schermen
+        function toonScherm(actiefSchermId) {
+            // zet alle schermen in een array
+            const alleSchermen = ['loginScherm', 'wachtScherm', 'gameScherm', 'uitslagScherm', 'eindScherm'];
+
+            // verberg alle schermen
+            alleSchermen.forEach(scherm => {
+                document.getElementById(scherm)?.classList.add('hidden');
+            });
+
+            // laat alleen actieve scherm zien
+            document.getElementById(actiefSchermId)?.classList.remove('hidden');
+        }
 
         ws.onopen = () => {
             console.log('Verbonden met de lobby!');
@@ -58,47 +56,80 @@ import MainLayout from '../layouts/MainLayout.astro';
 
                 // Als de server zegt dat alles klopt:
                 else if (envelop.type === 'login_succes') {
-                    // NU PAS wisselen we van scherm!
-                    document.getElementById('loginScherm')?.classList.add('hidden');
-                    document.getElementById('wachtScherm')?.classList.remove('hidden');
+                    toonScherm('wachtScherm');
                 }
 
                 // Als de server zegt dat het spel is gestart:
                 else if (envelop.type === 'nieuwe_vraag') {
-                    // verberg alles standaard
-                    document.getElementById('wachtScherm')?.classList.add('hidden');
-                    document.querySelector('.antwoord-knoppen').classList.add('hidden');
-                    document.getElementById('openVraagContainer').classList.add('hidden');
-                    
-                    document.getElementById('kijkNaarScherm').textContent = 'Kijk naar het grote scherm!';
-                    document.getElementById('gameScherm')?.classList.remove('hidden');
+                    // spelers mogen antwoorden
+                    magAntwoorden = true;
+
+                    // reset de achtergrondkleur van de vorige vraag
                     document.body.classList.remove('scherm-goed', 'scherm-fout');
+
+                    toonScherm('gameScherm');
+
+                    // verberg alles standaard
+                    // document.getElementById('wachtScherm')?.classList.add('hidden');
+                    // document.querySelector('.antwoord-knoppen').classList.add('hidden');
+                    // document.getElementById('openVraagContainer').classList.add('hidden');
+                    // document.getElementById('uitslagScherm').classList.add('hidden');
+                    // document.getElementById('eindScherm').classList.add('hidden');
+                    
+                    // document.getElementById('kijkNaarScherm').textContent = 'Kijk naar het grote scherm!';
+                    // document.getElementById('gameScherm')?.classList.remove('hidden');
+                    // document.body.classList.remove('scherm-goed', 'scherm-fout');
                     
                     // laat de juiste besturing zien op basis van het type vraag
                     if (envelop.vraagSoort === 'open_seizoen') {
+                        document.querySelector('.antwoord-knoppen').classList.add('hidden');
                         document.getElementById('openVraagContainer').classList.remove('hidden');
-                        document.getElementById('openAntwoordInput').value = ''; // Reset het invulveld
+                        document.getElementById('openAntwoordInput').value = ''; // reset het invulveld
                     } else {
+                        document.getElementById('openVraagContainer').classList.add('hidden');
                         document.querySelector('.antwoord-knoppen').classList.remove('hidden');
                     }
                 }
 
                 else if (envelop.type === 'ronde_uitslag_speler') {
-                    // verberg de knoppen weer
-                    document.querySelector('.antwoord-knoppen').classList.add('hidden');
+                    toonScherm('uitslagScherm');
 
-                    // verberg het open vraag veld
-                    document.getElementById('openVraagContainer').classList.add('hidden');
+                    // // verberg controller component
+                    // document.getElementById('gameScherm')?.classList.add('hidden');
 
-                    const tekst = document.getElementById('kijkNaarScherm');
+                    // // laat uitslag component zien
+                    // document.getElementById('uitslagScherm')?.classList.remove('hidden');
+
+                    const tekst = document.getElementById('uitslagTekst');
+
                     if (envelop.isGoed) {
-                        tekst.innerHTML = `GOED! Het juiste antwoord was inderdaad ${envelop.juisteAntwoord}!<br><br>+100 punten!<br><br>Jouw score: <strong>${envelop.jouwScore} punten</strong>`;
+                        tekst.innerHTML = `GOED!<br><br>Jouw score: <strong>${envelop.jouwScore} punten</strong>`;
                         document.body.classList.add('scherm-goed');
                     } else {
-                        tekst.innerHTML = `FOUT! Het juiste antwoord was: ${envelop.juisteAntwoord}<br><br>Jouw score: <strong>${envelop.jouwScore} punten</strong>`;
+                        tekst.innerHTML = `FOUT!<br><br>Jouw score: <strong>${envelop.jouwScore} punten</strong>`;
                         document.body.classList.add('scherm-fout');
                     }
+                }
+                else if (envelop.type === 'eindscore') {
+                    // document.getElementById('gameScherm')?.classList.add('hidden');
+                    // document.getElementById('wachtScherm')?.classList.add('hidden');
+                    // document.getElementById('uitslagScherm')?.classList.add('hidden');
+                    document.body.classList.remove('scherm-goed', 'scherm-fout');
+                    toonScherm ('eindScherm');
 
+                    // document.getElementById('eindScherm')?.classList.remove('hidden');
+                }
+                else if (envelop.type === 'ga_naar_lobby') {
+                    // reset de achtergrondkleuren van het uitslag-scherm
+                    document.body.classList.remove('scherm-goed', 'scherm-fout');
+                    
+                    toonScherm('wachtScherm');
+                }
+                else if (envelop.type === 'tussenstand') {
+                    document.body.classList.remove('scherm-goed', 'scherm-fout');
+                    
+                    document.getElementById('wachtScherm').textContent = 'Tussenstand op het grote scherm!';
+                    toonScherm('wachtScherm');
                 }
 
             } catch (error) {
@@ -106,22 +137,26 @@ import MainLayout from '../layouts/MainLayout.astro';
             }
         };
 
+        // meedoen knop
         document.getElementById('joinBtn')?.addEventListener('click', () => {
             const naamInput = document.getElementById('spelerNaam');
             const spelerNaam = naamInput.value;
 
             const envelop = {
                 type: 'nieuwe_speler',
-                naam: spelerNaam // of hoe jouw variabele voor de naam ook heet!
+                naam: spelerNaam 
             };
             ws.send(JSON.stringify(envelop));
         });
 
-        // luister naar klikken op 4 knoppen
-        const antwoordKnoppen = document.querySelectorAll('.antwoord-knop');
-
-        antwoordKnoppen.forEach((knop) => {
+        // luisteren naar multiple choice knoppen
+        document.querySelectorAll('.antwoord-knop').forEach((knop) => {
             knop.addEventListener('click', (event) => {
+                // slot dicht -> niks doen
+                if (!magAntwoorden) return;
+                // anders
+                magAntwoorden = false;
+
                 // haal nummer van knop op (0-3)
                 const gekozenIndex = event.target.getAttribute('data-index');
 
@@ -135,12 +170,18 @@ import MainLayout from '../layouts/MainLayout.astro';
                 console.log('Antwoord verzonden:', envelop);
 
                 // verander tekst zodat speler weet dat antwoord is verzonden
-                document.getElementById('kijkNaarScherm').textContent = 'Antwoord verzonden! Wachten op de rest...';
+                document.getElementById('wachtScherm').textContent = 'Antwoord verzonden! Wachten op de rest...';
+                toonScherm('wachtScherm');
             });
         });
 
         // luister naar verzenden van open vraag
         document.getElementById('stuurOpenBtn')?.addEventListener('click', () => {
+            // slot dicht -> niks doen
+            if (!magAntwoorden) return;
+            // anders
+            magAntwoorden = false;
+
             const input = document.getElementById('openAntwoordInput');
             
             const envelop = {
@@ -149,8 +190,8 @@ import MainLayout from '../layouts/MainLayout.astro';
             };
             ws.send(JSON.stringify(envelop));
             
-            document.getElementById('kijkNaarScherm').textContent = 'Antwoord verzonden! Wachten op de rest...';
-            document.getElementById('openVraagContainer').classList.add('hidden');
+            document.getElementById('wachtScherm').textContent = 'Antwoord verzonden! Wachten op de rest...';
+            toonScherm('wachtScherm');
         });
     </script>
 </MainLayout>
@@ -164,50 +205,6 @@ import MainLayout from '../layouts/MainLayout.astro';
 
     h1 {
         margin-bottom: 2rem;
-    }
-
-    .login-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .name-input {
-        padding: 12px;
-        font-size: 1.1rem;
-        width: 100%;
-        max-width: 300px;
-        text-align: center;
-        border: 2px solid #ccc;
-        border-radius: 8px;
-        outline: none;
-    }
-
-    .name-input:focus {
-        border-color: #333;
-    }
-
-    .join-button {
-        padding: 12px 24px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        cursor: pointer;
-        background-color: var(--secondary-color);
-        color: black;
-        border: none;
-        border-radius: 8px;
-        transition: background-color 0.2s;
-    }
-
-    .join-button:hover {
-        scale: 1.1;
-        transition: all 0.2s;
-    }
-
-    .waiting-screen {
-        color: var(--secondary-color); 
-        margin-top: 2rem;
     }
 
     .hidden {

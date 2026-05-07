@@ -1,45 +1,12 @@
----
-import MainLayout from "../layouts/MainLayout.astro";
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta http-equiv="refresh" content="0;url=/host" />
+    <title>The One With The Quiz</title>
+</head>
+<body style="background-color: #162515; color: white; text-align: center; padding-top: 50px; font-family: sans-serif;">
+    <h2>Laden van de quiz... </h2>
+</body>
+</html>
 
----
-<MainLayout title="The One With The Quiz">
-    <body>
-        <div class="intro">
-            <p>Are you the ultimate Friends fan? Test your knowledge!</p>
-            
-            <a href="/quiz" class="start-knop">Start the Quiz</a>
-        </div>
-    </body>
-</MainLayout>
-
-<style>
-	body {
-		background-color: black;
-		color: white;
-		font-family: Arial, sans-serif;
-		margin: 0;
-		padding: 2rem;
-	}
-	
-	.intro {
-		text-align: center;
-		margin-bottom: 3rem;
-	}
-
-	.start-knop {
-		display: inline-block;
-		background-color: var(--secondary-color);
-		color: black;
-		font-weight: bold;
-		text-decoration: none;
-		padding: 1rem 2rem;
-		border-radius: 8px;
-		margin-top: 1rem;
-		font-size: 1.2rem;
-		transition: transform 0.2s;
-	}
-
-	.start-knop:hover {
-		transform: scale(1.05);
-	}
-</style>
+<!-- chatgpt gevraagd hoe ik de pagina automatisch naar de hostpagina kan sturen omdat ik deze oude index pagina niet meer nodig heb -->

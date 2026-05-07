@@ -165,9 +165,6 @@ Ik heb mij meer verdiept in de code verdelen in losse componenten.
 ### Wat ga ik de volgende keer doen?
 De volgende keer ga ik beginnen met de styling.
 
-## Voortangsgesprek 4
-## Weekvoortgang week 4
-
 # Week 5
 ## Dinsdag 5 mei
 ### Wat heb ik gedaan? / Hoe lang heb ik daarover gedaan?
@@ -190,6 +187,18 @@ Verder met de styling en zorgen dat het spel automatisch doorloopt ipv gestuurd 
 13.00-14.00 | 1uur | Styling lobby
 14.00-15.00 | 1uur | Styling antwoordscherm, kleine dingetjes in de styling
 
+## Donderdag 7 mei
+### Wat heb ik gedaan? / Hoe lang heb ik daarover gedaan?
+10.00-13.00 | 3uur | Styling: lobby, controller, kleine fixes overall
+13.00-14.00 | 1uur | Pauze
+14.00-16.00 | 2uur | Server problemen Render fixen
+16.00-17.00 | 1uur | Readme updaten, reflectie schrijven
+17.00-17.15 | 15min | Inleveren DLO
+
+# Aanbevelingen
+Overall vond ik dit een ontzettend gaaf project om aan te werken en ik zou hier zo nog weken mee door kunnen! Misschien ga ik dat ook wel doen haha :). Ondanks dat ik tevreden ben met mijn eindproduct zijn er wel dingen die ik had willen doen maar waar ik geen tijd meer voor had.
+
+Als ik meer tijd had gehad had ik namelijk veel dieper de styling in willen gaan om de gebruiker echt het gevoel te geven dat die IN de serie zit (en daarbij meer animatie en leuke easter eggs). Daarnaast had ik een tweede content API met friends quotes toe willen voegen voor iets meer variatie in de quizvragen. Ook had ik muziek en soundeffects willen toevoegen die te relateren zijn aan de serie.
 
 # Bronnenlijst
 Content API friends (TMDB)
@@ -220,3 +229,19 @@ https://youtu.be/PBcqGxrr9g8?si=fGxu_nnYj_VEHWnn
 https://youtu.be/6w9cnCC1VI8?si=aDDYX41Ds1mGTTVb
 https://youtu.be/vZe4SvsnLxM?si=UWjnyBzdKVQO96in
 
+Border image
+https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/border-image-source
+& Sabrina
+
+GIFS & afbeeldingen
+- https://tenor.com/nl/
+- https://giphy.com/
+- Central Perk logo: https://toppng.com/free-image/aint-on-a-canvas-and-put-on-a-coffee-corner-or-coffee-warner-bros-studios-friends-central-perk-set-PNG-free-PNG-Images_205384
+- Overige afbeeldingen heb ik niet overal de links van opgeslagen maar was deels van wikipedia en random websites.
+
+Gabriel Weiss Friends Font
+- https://www.dafont.com/gabriel-weiss-friends.font
+
+Chatgpt/Google Gemini
+- Bug fixes
+- Server problemen met Render (dit staat er op de meeste plekken in de code bij) > uiteindelijk was het probleem dat zowel het Astro project als mijn server.js (waar de websocket API op draait) niet op dezelfde port konden. Ik heb mijn project een tweede keer geupload op Render met nu als start command "node server.js". Vervolgens heb ik de URL van dat tweede project toegevoegd aan de const wsUrl in host.astro en play.astro.

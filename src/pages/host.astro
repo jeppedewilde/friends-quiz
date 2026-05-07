@@ -24,6 +24,7 @@ import VraagScherm from '../components/host/VraagScherm.astro';
         const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 
         // Gebruik lokaal poort 8081, en gebruik online de Render URL
+        // wss:// is de URL van de backend website die ik op Render draai
         const wsUrl = isLokaal 
         ? `ws://${window.location.hostname}:8081` 
         : `wss://friends-quiz-backend-wsx2.onrender.com`;

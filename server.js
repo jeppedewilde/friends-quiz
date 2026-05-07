@@ -3,6 +3,9 @@ import {
     WebSocketServer
 } from 'ws';
 
+// volgens chatgpt nodig voor render omdat render anders denkt dat de server crasht
+import http from 'http';
+
 // import dotenv om api key veilig te gebruiken (server.js kent .env bestand niet > dotenv zorgt ervoor dat server.js ook toegang heeft tot de variabelen in .env)
 import dotenv from 'dotenv';
 
@@ -24,8 +27,14 @@ let huidigJuistAntwoord = "";
 // Als die niet bestaat (zoals lokaal op je laptop), gebruikt hij 8081.
 const port = process.env.PORT || 8081;
 
+// maak standaard http server aan
+const healthServer = http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end('Server is live!');
+});
+
 const server = new WebSocketServer({
-    port: port
+    server: healthServer
 });
 
 const clients = new Set();
@@ -311,4 +320,6 @@ function stuurUitslag() {
     });
 }
 
-console.log(`WebSocket server is running on port: ${port}`);
+healthServer.listen(port, () => {
+    console.log(`Server luistert op poort ${port}`);
+});

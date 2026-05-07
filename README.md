@@ -192,8 +192,7 @@ Verder met de styling en zorgen dat het spel automatisch doorloopt ipv gestuurd 
 10.00-13.00 | 3uur | Styling: lobby, controller, kleine fixes overall
 13.00-14.00 | 1uur | Pauze
 14.00-16.00 | 2uur | Server problemen Render fixen
-16.00-17.00 | 1uur | Readme updaten, reflectie schrijven
-17.00-17.15 | 15min | Inleveren DLO
+16.00-16.15 | 15min | Readme updaten en inleveren op DLO
 
 # Aanbevelingen
 Overall vond ik dit een ontzettend gaaf project om aan te werken en ik zou hier zo nog weken mee door kunnen! Misschien ga ik dat ook wel doen haha :). Ondanks dat ik tevreden ben met mijn eindproduct zijn er wel dingen die ik had willen doen maar waar ik geen tijd meer voor had.

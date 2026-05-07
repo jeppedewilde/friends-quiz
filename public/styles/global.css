@@ -1,13 +1,16 @@
 /* src/styles/global.css */
-
 *, *::before, *::after {
     box-sizing: border-box;
 }
 
 :root {
-    --primary-color: #6a0dad;
+    --primary-color: #a876e6;
     --secondary-color: #ffcc00;
     --font-family: 'Arial', sans-serif;
+    --color-red: #e01d24;
+    --color-yellow: #f2b618;
+    --color-blue: #01ace0;
+    --color-green: #009a4e;
 }
 
 body {
@@ -18,9 +21,35 @@ body {
     font-family: var(--font-family);
 }
 
+@font-face {
+    font-family: 'Gabriel Weiss';
+    src: url('/fonts/gabriel-weiss.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lacquer';
+    src: url('/fonts/lacquer.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 header {
     width: 100%;
     margin: 0;
     left: 0;
     right: 0;
+}
+
+h1 {
+    font-family: 'Gabriel Weiss', sans-serif;
+    letter-spacing: 3px;
+    font-weight: normal;
+}
+
+p {
+    font-family: 'Courier New', Courier, monospace;
 }

@@ -11,8 +11,10 @@ import VraagScherm from '../components/host/VraagScherm.astro';
     <Scoreboard />
 
     <script>
+        // @ts-nocheck
         // maak verbinding met websocket server
-        const ws = new WebSocket('ws://localhost:8081');
+        // const ws = new WebSocket('ws://localhost:8081');
+        const ws = new WebSocket(`ws://${window.location.hostname}:8081`);
 
         // functie om te wisselen tussen de componenten
         function toonScherm(actiefSchermId) {
@@ -44,19 +46,28 @@ import VraagScherm from '../components/host/VraagScherm.astro';
                 if (envelop.type === 'spelers_update') {
                     const messages = document.getElementById('messages') as HTMLElement;
                     messages.innerHTML = ''; // maak eerst leeg
+
+                    // krijtkleuren
+                    const krijtKleuren = ['#FF6961', '#77DD77', '#AEC6CF', '#FDFD96'];
                 
                     // elke nieuwe speler nieuwe regel
                     envelop.spelerLijst.forEach((speler) => {
                         const newMessage = document.createElement('div');
-                        newMessage.textContent = `Speler in de game: ${speler}`;
+                        newMessage.textContent = speler;
+
+                        // kies random krijtkleur
+                        const randomKleur = krijtKleuren[Math.floor(Math.random() * krijtKleuren.length)];
+
+                        // geef kleur aan tekst en draai het een heel klein beetje
+                        newMessage.style.color = randomKleur;
+                        newMessage.style.transform = `rotate(${Math.random() * 4 - 2}deg)`;
+
                         messages.appendChild(newMessage);
                     });
                 }
 
                 // MARK: vraag gestart
                 else if (envelop.type === 'nieuwe_vraag') {
-                    // verberg volgende knop tijdens het beantwoorden
-                    document.getElementById('nextBtn')?.classList.add('hidden');
                     document.getElementById('eindscoreBtn')?.classList.add('hidden');
 
                     toonScherm('vraagScherm');
@@ -64,7 +75,7 @@ import VraagScherm from '../components/host/VraagScherm.astro';
                     // update de vraag-teller
                     const teller = document.getElementById('vraagTeller');
                     if (teller) {
-                        teller.textContent = `Vraag ${envelop.vraagNummer} / ${envelop.totaalVragen}`;
+                        teller.textContent = `Question ${envelop.vraagNummer} / ${envelop.totaalVragen}`;
                     }
 
                     // reset en start de timer-balk
@@ -84,7 +95,8 @@ import VraagScherm from '../components/host/VraagScherm.astro';
                     }
 
                     // elementen ophalen om te vullen met vraag-data
-                    const titelElement = document.querySelector('#vraagScherm h2');
+                    const titelElement = document.getElementById('vraagTitel');
+                    const categorieElement = document.getElementById('vraagCategorie');
                     const afbeeldingElement = document.getElementById('vraagAfbeelding');
                     const optiesContainer = document.getElementById('hostOpties');
                     const uitslagTekst = document.getElementById('hostUitslagTekst');
@@ -92,13 +104,15 @@ import VraagScherm from '../components/host/VraagScherm.astro';
                     // reset alles
                     optiesContainer.innerHTML = '';
                     uitslagTekst.classList.add('hidden');
+                    afbeeldingElement.classList.remove('grote-foto');
 
                     // sla type vraag op in de window
                     window.huidigeVraagSoort = envelop.vraagSoort;
 
                     // vraag: foto met 4 titel antwoorden
                     if (envelop.vraagSoort === 'mc_titels') {
-                        titelElement.textContent = 'Welke aflevering is dit?';
+                        categorieElement.textContent = 'Category: pick the title';
+                        titelElement.textContent = ' ';
                         afbeeldingElement.src = envelop.afbeelding;
                         afbeeldingElement.classList.remove('hidden');
                         
@@ -112,6 +126,7 @@ import VraagScherm from '../components/host/VraagScherm.astro';
 
                     // vraag: titel met 4 foto antwoorden
                     else if (envelop.vraagSoort === 'mc_plaatjes') {
+                        categorieElement.textContent = 'Category: pick the image';
                         titelElement.textContent = envelop.titel;
                         afbeeldingElement.classList.add('hidden');
                         
@@ -122,16 +137,20 @@ import VraagScherm from '../components/host/VraagScherm.astro';
                             knop.style.backgroundImage = `url(${optieUrl})`;
                             knop.style.backgroundSize = 'cover';
                             knop.style.backgroundPosition = 'center';
-                            knop.style.height = '200px'; 
+                            knop.style.height = '30vh'; 
+                            const kleuren = ['var(--color-red)', 'var(--color-blue)', 'var(--color-yellow)', 'var(--color-green)'];
+                            knop.style.boxShadow = `inset 0 0 0 10px ${kleuren[index]}`;
                             optiesContainer.appendChild(knop);
                         });
                     }
 
                     // vraag: foto met open antwoord
                     else if (envelop.vraagSoort === 'open_seizoen') {
-                        titelElement.textContent = `Uit welk seizoen komt: ${envelop.titel}?`;
+                        categorieElement.textContent = 'Category: name the season';
+                        titelElement.textContent = `${envelop.titel}`;
                         afbeeldingElement.src = envelop.afbeelding;
                         afbeeldingElement.classList.remove('hidden');
+                        afbeeldingElement.classList.add('grote-foto');
                     }
                 }
 
@@ -175,10 +194,33 @@ import VraagScherm from '../components/host/VraagScherm.astro';
                     // kies welke knop getoond wordt (volgende vraag vs. eindscore)
                     if (envelop.isLaatsteVraag) {
                         document.getElementById('eindscoreBtn')?.classList.remove('hidden');
-                        document.getElementById('nextBtn')?.classList.add('hidden');
                     } else {
-                        document.getElementById('nextBtn')?.classList.remove('hidden');
-                        document.getElementById('eindscoreBtn')?.classList.add('hidden');
+                        window.startGetReady = () => {
+                            const getReady = document.getElementById('getReadyScherm');
+                            const teller = document.getElementById('getReadyTeller');
+                            getReady.classList.remove('hidden');
+
+                            let seconden = 3;
+                            teller.textContent = seconden;
+
+                            clearInterval(window.getReadyInterval);
+                            window.getReadyInterval = setInterval(() => {
+                                seconden--;
+                                teller.textContent = seconden;
+
+                                if (seconden <= 0) {
+                                    clearInterval(window.getReadyInterval);
+                                    getReady.classList.add('hidden');
+                                    ws.send(JSON.stringify({ type: 'start_game' }));
+                                }
+                            }, 1000);
+                        };
+
+                        // wacht 3 sec om antwoord te laten zien, daarna automatisch volgende vraag
+                        clearTimeout(window.autoPlayTimer);
+                        window.autoPlayTimer = setTimeout(() => {
+                            window.startGetReady();
+                        }, 3000);
                     }
                 } 
                 
@@ -189,12 +231,12 @@ import VraagScherm from '../components/host/VraagScherm.astro';
                     // inhoud titels en knoppen
                     document.getElementById('scoreboardTitel').textContent = 'The One Who Won The Quiz 🏆';
                     document.getElementById('restartBtn').classList.remove('hidden');
-                    document.getElementById('terugNaarQuizBtn').classList.add('hidden');
 
                     const scoreLijst = document.getElementById('scoreLijst');
-                    scoreLijst.innerHTML = ''; 
-
-                    // server stuurt object met scores > array van maken > sorteren hoog naar laag
+                    if (scoreLijst) {
+                        scoreLijst.innerHTML = ''; // maak eerst leeg
+                    
+                        // server stuurt object met scores > array van maken > sorteren hoog naar laag
                     const gesorteerdeScores = Object.entries(envelop.scores).sort((a, b) => b[1] - a[1]);
 
                     // elke speler met score laten zien
@@ -214,45 +256,18 @@ import VraagScherm from '../components/host/VraagScherm.astro';
                         else if (index === 2) medaille = '🥉 ';
 
                         spelerRegel.innerHTML = `<span>${medaille} ${naam}</span> <span>${punten} ptn</span>`;
+                        const krijtKleuren = ['#FF6961', '#77DD77', '#AEC6CF', '#FDFD96'];
+                        const randomKleur = krijtKleuren[Math.floor(Math.random() * krijtKleuren.length)];
+                        spelerRegel.style.color = randomKleur;
+                        spelerRegel.style.transform = `rotate(${Math.random() * 4 - 2}deg)`;
                         scoreLijst.appendChild(spelerRegel);
                     });
                 }
+            }
 
                 // MARK: lobby knop
                 else if (envelop.type === 'ga_naar_lobby') {
                     toonScherm('wachtScherm');
-                }
-
-                // MARK: tussenstand
-                // alles van eindscore maar dan andere teksten
-                else if (envelop.type === 'tussenstand') {
-                    toonScherm ('eindScherm');
-
-                    // pas titels en knoppen aan 
-                    document.getElementById('scoreboardTitel').textContent = 'Tussenstand 📊';
-                    document.getElementById('restartBtn').classList.add('hidden');
-                    document.getElementById('terugNaarQuizBtn').classList.remove('hidden');
-
-                    const scoreLijst = document.getElementById('scoreLijst');
-                    scoreLijst.innerHTML = ''; 
-                    const gesorteerdeScores = Object.entries(envelop.scores).sort((a, b) => b[1] - a[1]);
-
-                    gesorteerdeScores.forEach(([naam, punten], index) => {
-                        const spelerRegel = document.createElement('div');
-                        spelerRegel.classList.add('speler-rij');
-                        
-                        if (index === 0) {
-                            spelerRegel.classList.add('winnaar');
-                        }
-
-                        let medaille = '👏 ';
-                        if (index === 0) medaille = '🥇 ';
-                        else if (index === 1) medaille = '🥈 ';
-                        else if (index === 2) medaille = '🥉 ';
-
-                        spelerRegel.innerHTML = `<span>${medaille} ${naam}</span> <span>${punten} ptn</span>`;
-                        scoreLijst.appendChild(spelerRegel);
-                    });
                 }
 
             } catch (error) {
@@ -288,14 +303,6 @@ import VraagScherm from '../components/host/VraagScherm.astro';
             ws.send(JSON.stringify(envelop));
         });
 
-        // volgende vraag knop
-        document.getElementById('nextBtn')?.addEventListener('click', () => {
-            const envelop = {
-                type: 'start_game'
-            };
-            ws.send(JSON.stringify(envelop));
-        });
-
         // eindscore knop
         document.getElementById('eindscoreBtn')?.addEventListener('click', () => {
             const envelop = {
@@ -310,23 +317,25 @@ import VraagScherm from '../components/host/VraagScherm.astro';
             ws.send(JSON.stringify({ type: 'terug_naar_lobby' }));
         });
 
-        // tussenstand knop
-        document.getElementById('tussenstandBtn')?.addEventListener('click', () => {
-            ws.send(JSON.stringify({
-                type: 'vraag_tussenstand'
-            }));
-        });
-
-        // knop tussenstand naar quiz
-        document.getElementById('terugNaarQuizBtn')?.addEventListener('click', () => {
-            toonScherm('vraagScherm');
-            document.getElementById('tussenstandBtn')?.classList.add('hidden');
-        });
     </script>
 </MainLayout>
 
 <style is:global>
     .hidden {
         display: none !important;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    .host-optie-knop {
+        font-family: 'Courier New', Courier, monospace;
     }
 </style>

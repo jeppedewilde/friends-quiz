@@ -1,30 +1,280 @@
-<div id="wachtScherm">
-    <h1>Host scherm</h1>
+<div id="wachtScherm" class="lobby-scherm">
+    <h1>Lobby</h1>
+    <p>Wie is de grootste friends fan? Test het nu!</p>
 
-    <input type="text" id="message" placeholder="Type a message">
-    <button id="send">Stuur</button>
-    <button id="startGameBtn">Start</button>
-    
-    <div id="messages"></div>
+    <div class="content-wrapper">
+        <div class="krijtbord">
+            <div class="qr-sectie">
+                <h2>Scan de qr code en join!</h2>
+                <div id="qrcode" class="qr-box"></div>
+            </div>
+            <div>
+                <h2>Spelers</h2>
+                <div id="messages" class="spelers-lijst"></div>
+                <img src="/public/images/central_perk_logo.png" alt="Central Perk logo">
+            </div>
+        </div>
+    </div>
+
+    <div id="cast_wrapper">
+        <img src="/public/images/ross.png" alt="Ross Geller Face">
+        <img src="/public/images/monica.png" alt="Monica Geller Face">
+        <img src="/public/images/chandler.png" alt="Chandler Bing Face">
+        <img src="/public/images/joey.png" alt="Joey Tribbiani Face">
+        <img src="/public/images/rachel.png" alt="Rachel Green Face">
+        <img src="/public/images/phoebe.png" alt="Phoebe Buffay Face">
+    </div>
+
+    <button id="startGameBtn" class="start-knop">Start quiz</button>
+
+    <div style="display: none;">
+        <input type="text" id="message" placeholder="Type a message">
+        <button id="send">Stuur</button>
+    </div>
 </div>
 
+<!-- Laad de qrcode.js library in via een CDN -->
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- Genereer de QR code -->
+<script is:inline>
+    (function maakQR() {
+        const qrBox = document.getElementById("qrcode");
+        
+        if (!qrBox) {
+            setTimeout(maakQR, 50);
+            return;
+        }
+        
+        qrBox.innerHTML = ''; 
+        const speelUrl = `http://${window.location.host}/play`;
+        
+        new QRCode(qrBox, {
+            text: speelUrl,
+            width: 400,
+            height: 400,
+            colorDark : "#ffffff",
+            colorLight : "transparent",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+    })();
+</script>
+
+<script>
+    const startKnop = document.querySelector('.start-knop');
+    const castHoofden = document.querySelectorAll('#cast_wrapper img');
+
+    // lijstje om actieve animatie bij te houden
+    let actieveAnimaties = [];
+
+    // bij hover
+    startKnop?.addEventListener('mouseenter', () => {
+        
+        // ga langs elk cast hoofd
+        castHoofden.forEach((hoofd, index) => {
+            
+            // DE WEB ANIMATIONS API
+            const springAnimatie = hoofd.animate(
+                [
+                    { transform: "translateY(0px)" },
+                    { transform: "translateY(-30px)" },
+                    { transform: "translateY(0px)" }
+                ],
+                {
+                    duration: 600,
+                    iterations: Infinity,
+                    easing: "ease-in-out",
+                    delay: index * 100,
+                    composite: "add"
+                }
+            );
+            
+            // bewaar de animatie in lijstje
+            actieveAnimaties.push(springAnimatie);
+        });
+    });
+
+    // bij stoppen hover
+    startKnop?.addEventListener('mouseleave', () => {
+        // stop de animatie direct
+        actieveAnimaties.forEach(animatie => animatie.cancel());
+        
+        // maak lijstje weer leeg
+        actieveAnimaties = [];
+    });
+</script>
+
 <style>
-    #startGameBtn {
-        background-color: var(--secondary-color);
-        color: black;
-        font-weight: 600;
-        border: none;
-        padding: 10px;
-        margin-top: 20px; 
+    #cast_wrapper {
+        position: absolute;
+        top: -45px;
+        left: 0;
+        width: 100vw; 
+        height: 100vh;
+        
+        display: grid;
+        grid-template-columns: auto auto; 
+        grid-template-rows: repeat(3, 1fr);
+        justify-content: space-between;
+        align-items: center;
+        
+        padding: 20px;
+        box-sizing: border-box;
+        
+        z-index: 0;
+        pointer-events: none;
     }
 
-    #startGameBtn:hover {
-        cursor: pointer;
-        transform: scale(1.05);
+    #cast_wrapper img {
+        width: 150px;
+        height: auto;
+        filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+        transition: transform 0.3s ease;
     }
 
-    #messages {
-        margin-top: 20px;
+    #cast_wrapper img:nth-child(odd) {
+        transform: rotate(10deg);
+    }
+
+    #cast_wrapper img:nth-child(even) {
+        transform: rotate(-10deg); 
+    }
+
+    .lobby-scherm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        width: 100%;
+        min-height: calc(100vh - 60px); 
+        margin: 0;
+        padding: 40px 20px;
+        box-sizing: border-box;
+        position: relative; 
+
+        background-image: url('/images/brickwall.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        font-size: 3rem;
+        font-weight: 1000;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    }
+
+    p {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 2rem;
+        font-size: 1.5rem;
+        font-weight: 1000;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        font-family: 'Gabriel Weiss', sans-serif;
+        letter-spacing: 2px;
+    }
+
+    .content-wrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        font-family: 'Lacquer', monospace;
+    }
+
+    .krijtbord {
+        display: flex;
+        flex-direction: row; 
+        align-items: flex-start;
+        justify-content: center;
+        gap: 60px;
+
+        background-color: #162515; 
+        color: white;
+        border: 8px solid #845530;
+        border-radius: 4px;
+        padding: 40px;
+        position: relative; 
+    }
+
+    .qr-sectie {
+        text-align: center;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
+        width: 30vw;
+    }
+
+    h2 {
+        margin-top: 0;
+        margin-bottom: 10px;
         font-size: 1.2rem;
+    }
+
+    .qr-box {
+        display: inline-block;
+        background: transparent;
+        padding: 10px;
+        width: 25vw;
+        height: 25vw;
+    }
+
+    .qr-box img,
+    .qr-box canvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .krijtbord > div:last-child {
+        width: 35vw;
+        text-align: center;
+        position: relative;
+    }
+
+    .krijtbord > div:last-child h2 {
+        margin-top: 0;
+        border-bottom: 2px solid white;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .spelers-lijst {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 1.2rem;
+    }
+
+    .krijtbord img {
+        position: absolute;
+        z-index: 100;
+        width: 109px;
+        top: -55px;
+        right: -26px; 
+    }
+
+    .start-knop {
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+        padding: 10px 30px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border: none;
+        background-color: var(--secondary-color); 
+        cursor: pointer;
+    }
+
+    .start-knop:hover {
+        animation: bounce 0.5s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
     }
 </style>

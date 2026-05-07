@@ -1,4 +1,10 @@
 <div id="vraagScherm" class="hidden">
+    <!-- Het Get Ready scherm (overlay) -->
+    <div id="getReadyScherm" class="hidden get-ready-scherm">
+        <h1>Get Ready!</h1>
+        <h2>Nieuwe vraag start in... <span id="getReadyTeller">3</span></h2>
+    </div>
+
     <div class="vraag-header">
         <span id="vraagTeller"></span>
         <div class="timer-container">
@@ -6,14 +12,14 @@
         </div>
     </div>
     
-    <h2>Welke aflevering is dit?</h2>
+    <h3 id="vraagCategorie" class="categorie-tekst">Category: ... </h3>
+
+    <h2 id="vraagTitel">Welke aflevering is dit?</h2>
     <img id="vraagAfbeelding" src="" alt="Aflevering">
     
     <div id="hostOpties"></div>
     <h3 id="hostUitslagTekst" class="hidden uitslag-tekst"></h3>
 
-    <button id="nextBtn" class="hidden">Volgende vraag</button>
-    <button id="tussenstandBtn" class="hidden tussenstand-btn">Tussenstand</button>
     <button id="eindscoreBtn" class="hidden eindscore-btn">Eindscore</button>
 </div>
 
@@ -21,67 +27,90 @@
     #vraagScherm {
         text-align: center;
         margin-top: 2rem;
+        position: relative;
     }
+
+    .get-ready-scherm {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(101, 60, 152, 0.95);
+        /* 168, 118, 230 */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        color: white;
+    }
+
+    .get-ready-scherm h1 {
+        font-size: 5rem;
+        color: var(--color-yellow);
+        margin-bottom: 20px;
+    }
+
     #vraagAfbeelding {
         max-width: 100%;
-        height: auto;
+        height: 25vh;
+        object-fit: cover;
         border-radius: 12px;
         margin-bottom: 20px;
+        transition: height 0.3s ease;
+    }
+
+    #vraagAfbeelding.grote-foto {
+        height: 45vh;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.4);
     }
 
     #hostOpties {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        max-width: 800px;
+        gap: 30px;
+        width: 100%;
+        max-width: 1200px;
         margin: 0 auto;
+        padding: 0 40px;
+        margin: 0 auto;
+        box-sizing: border-box;
     }
 
     :global(.host-optie-knop) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        
+        min-height: 120px; 
+        padding: 20px;
+        
         color: white;
-        padding: 10px;
-        font-size: 1.5rem;
+        font-size: 1.8rem; 
         font-weight: bold;
-        border-radius: 8px;
+        border-radius: 12px; 
         transition: all 0.3s;
+        box-sizing: border-box;
+        
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
     }
 
-    /* Kleuren en states */
-    :global(.kleur-0) { 
-        background-color: #e21b3c; 
-    }
-    :global(.kleur-1) { 
-        background-color: #1368ce; 
-    }
-    :global(.kleur-2) { 
-        background-color: #d89e00; 
-    }
-    :global(.kleur-3) { 
-        background-color: #26890c; 
-    }
+    :global(.kleur-0) { background-color: var(--color-red); }
+    :global(.kleur-1) { background-color: var(--color-blue); }
+    :global(.kleur-2) { background-color: var(--color-yellow); }
+    :global(.kleur-3) { background-color: var(--color-green); }
     
-    :global(.fout-antwoord) { 
-        opacity: 0.3; 
-    }
+    :global(.fout-antwoord) { opacity: 0.3; }
     
     :global(.goed-antwoord) { 
-        transform: scale(1.05); 
-        border: 4px solid white; 
-        box-shadow: 0 0 15px white;
-    }
-
-    /* Styling voor de knoppen en tekst onderaan */
-    #nextBtn {
-        margin-top: 30px;
-        padding: 12px 24px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        cursor: pointer;
-        background-color: var(--secondary-color);
-        color: black;
-        border: none;
-        border-radius: 8px;
-        transition: background-color 0.2s;
+        border: 0px solid transparent; 
+        border-image-source: url(/public/images/frame.png);
+        border-image-repeat: stretch;
+        border-image-slice: 128;
+        border-image-outset: 1.4rem;
+        border-image-width: 2rem;
     }
 
     .uitslag-tekst {
@@ -109,6 +138,15 @@
         gap: 10px;
     }
 
+    .categorie-tekst {
+        font-size: 1.2rem;
+        color: var(--color-yellow);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
     #vraagTeller {
         font-size: 1.2rem;
         font-weight: bold;
@@ -128,18 +166,19 @@
         height: 100%;
         background-color: var(--secondary-color);
     }
-
-    .tussenstand-btn {
-        margin-top: 30px;
-        padding: 12px 24px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        cursor: pointer;
-        background-color: #1368ce;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        margin-left: 10px;
-    }
     
+    #vraagTitel {
+        margin-bottom: 20px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    h2 {
+        margin-bottom: 10px;
+    }
+
+    #vraagCategorie, #vraagTitel {
+        font-family: 'Gabriel Weiss', sans-serif;
+        letter-spacing: 2px;
+        font-weight: normal;
+    }
 </style>

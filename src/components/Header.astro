@@ -3,17 +3,8 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header>
-    <a href="/">The One With The Quiz</a>
-    <nav>
-        <ul>
-            <li>
-                <a href="/" class={currentPath === '/' ? 'active' : ''}>Home</a>
-            </li>
-            <li>
-                <a href="/quiz" class={currentPath === '/quiz' ? 'active' : ''}>Quiz</a>
-            </li>
-        </ul>
-    </nav>
+    <div class="titel-links">THE &bull; ONE &bull; WITH &bull; THE &bull; QUIZ</div>
+    <img src="/public/images/friends_logo_wit_def.png" alt="Friends Logo">
 </header>
 
 <style>
@@ -23,33 +14,29 @@ const currentPath = Astro.url.pathname;
         align-items: center;
         padding: 1.5rem 2rem;
         background-color: #111;
-        border-bottom: 2px solid #222;
-
-    ul {
-        display: flex;
-        gap: 1rem;
-        list-style: none;
-        margin: 0;
-        padding: 0;
     }
 
-    a {
-        text-decoration: none;
-        color: #e0e0e0;
-        font-weight: 600;
-        font-size: 1.1rem;
-        padding: 0.5rem 1rem; 
-        border-radius: 8px;
+    .titel-links {
+        font-family: 'Gabriel Weiss', sans-serif;
+        letter-spacing: 0px;
     }
 
-    a:hover {
-        background-color: rgba(255, 204, 0, 0.1); 
-        color: #ffcc00; 
+    img {
+        height: 18px;
     }
 
-    .active {
-        background-color: #ffcc00;
-        color: #111;
+    @media screen and (max-width: 768px) {
+        header {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .titel-links {
+            font-size: 1.2rem;
+        }
+        
+        img {
+            height: 25px;
+        }
     }
-}
 </style>

@@ -28,7 +28,7 @@ const clients = new Set();
 // lege lijst voor de spelers, en een object om hun scores bij te houden
 let spelers = [];
 let huidigeVraagNummer = 0;
-const MAX_VRAGEN = 5;
+const MAX_VRAGEN = 10;
 let scores = {};
 let aantalAntwoorden = 0;
 let correcteIndex = 0;

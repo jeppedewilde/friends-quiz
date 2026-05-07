@@ -1,15 +1,49 @@
-<div id="eindScherm" class="hidden">
-    <h2>Het spel is afgelopen!</h2>
-    <p>Kijk naar het grote scherm voor de einduitslag en de winnaar.</p>
+<div id="eindScherm" class="eind-container hidden">
+    <h1>"And that, my friend, is what they call closure."</h1>
+    
+    <!-- Hier komt de eindscore in te staan -->
+    <h2 id="eindScoreTekst" class="eind-tekst">Jouw score: ...</h2>
+
+    <!-- Hier gooien we de random GIF in -->
+    <img id="eindGif" src="" alt="Friends GIF" class="gif-box hidden" />
 </div>
 
 <style>
-    #eindScherm { 
-        margin-top: 2rem; 
+    body {
+        overflow: hidden;
     }
 
-    h2 { 
-        color: var(--secondary-color); 
-        margin-bottom: 15px; 
+    .eind-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        /* height: calc(100vh - 150px); */
+        height: 70vh;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .eind-container h1 {
+        color: white;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    }
+
+    .eind-tekst {
+        font-size: 1.8rem;
+        color: #ffc107; 
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .gif-box {
+        width: 100%;
+        max-width: 280px;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
     }
 </style>

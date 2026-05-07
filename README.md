@@ -168,6 +168,29 @@ De volgende keer ga ik beginnen met de styling.
 ## Voortangsgesprek 4
 ## Weekvoortgang week 4
 
+# Week 5
+## Dinsdag 5 mei
+### Wat heb ik gedaan? / Hoe lang heb ik daarover gedaan?
+- QR code om te joinen vanuit een library
+- Styling (deels): Lobby, naam invullen, wachterscherm player, antwoordscherm, ronde uitslag, eindscore player
+
+### Wat heb ik geleerd?
+Hoe ik een QR code library inlaadt
+
+### Wat ga ik de volgende keer doen?
+Verder met de styling en zorgen dat het spel automatisch doorloopt ipv gestuurd door de host.
+
+## Woensdag 6 mei
+### Wat heb ik gedaan? / Hoe lang heb ik daarover gedaan?
+09.30-10.00 | 30min | Project opstarten en even bijkletsen met klasgenoten
+10.00-10.30 | 30min | Struggelen met de qr code (na scannen met camera verwijderd safari http:// voor de link waardoor het niet werkt)
+10.30-11.30 | 1uur | Quiz automatisch laten doorlopen ipv driven door de host
+11.30-12.00 | 30min | Styling vraag/antwoordscherm (host)
+12.00-13.00 | 1uur | Pauze
+13.00-14.00 | 1uur | Styling lobby
+14.00-15.00 | 1uur | Styling antwoordscherm, kleine dingetjes in de styling
+
+
 # Bronnenlijst
 ViewTransitions web API - https://www.youtube.com/watch?v=bpT8q-LUgXw
 

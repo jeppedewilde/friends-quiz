@@ -1,93 +1,109 @@
----
-
----
-
-<div id="eindScherm" class="hidden scoreboard-container">
-    <h1 id="scoreboardTitel">The One Who Won The Quiz</h1>
-    
-    <div id="scoreLijst" class="score-lijst"></div>
-    
-    <button id="terugNaarQuizBtn" class="hidden terug-button">Terug naar de quiz</button>
-    <button id="restartBtn" class="restart-button">Terug naar lobby</button>
+<div id="eindScherm" class="hidden scherm-wrapper">
+    <div class="krijtbord scoreboard-krijtbord">
+        <h2 id="scoreboardTitel">The One Who Won The Quiz</h2>
+        
+        <div id="scoreLijst" class="score-lijst"></div>
+        
+        <img src="/public/images/central_perk_logo.png" alt="Central Perk logo" class="perk-logo">
+        
+        <div class="knoppen-balk">
+            <button id="restartBtn" class="hidden krijt-knop">Terug naar Lobby</button>
+        </div>
+    </div>
 </div>
 
 <style>
-    .scoreboard-container {
+    .scherm-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 2rem;
-        font-family: sans-serif;
+        width: 100vw;
+        min-height: 100vh;
+        background-image: url('/images/brickwall.jpeg');
+        background-size: cover;
+        background-position: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 50; 
     }
 
-    h1 {
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
+    .scoreboard-krijtbord {
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        background-color: #162515; 
+        color: white;
+        border: 8px solid #845530;
+        border-radius: 4px;
+        padding: 40px 80px;
+        position: relative; 
+        min-width: 50vw;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+    }
+
+    .scoreboard-krijtbord h2 {
+        font-family: 'Gabriel Weiss', sans-serif;
+        font-size: 3.5rem;
+        border-bottom: 3px solid white;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+        text-align: center;
     }
 
     .score-lijst {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
         width: 100%;
-        max-width: 400px;
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 1rem;
+        margin-bottom: 40px;
+        z-index: 2;
     }
 
-    .quote {
-        margin-top: 2rem;
-        font-style: italic;
-        color: #666;
-    }
-
-    .restart-button {
-        margin-top: 1.5rem;
-        padding: 10px 20px;
-        font-size: 1rem;
-        background-color: #333;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .restart-button:hover {
-        background-color: #555;
-    }
-
-    /* Dynamische rijen (ingeladen door JS) */
     :global(.speler-rij) {
         display: flex;
         justify-content: space-between;
-        padding: 10px;
-        border-bottom: 1px solid #eee;
-        color: #333;
-    }
-
-    :global(.speler-rij:last-child) {
-        border-bottom: none;
+        font-size: 2rem;
+        font-family: 'Gabriel Weiss', sans-serif;
+        padding: 5px 20px;
+        gap: 40px;
     }
 
     :global(.winnaar) {
+        font-size: 2.8rem !important; 
+        border-bottom: 2px dashed rgba(255,255,255,0.3);
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+    }
+
+    .perk-logo {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        width: 100px;
+        opacity: 0.8;
+    }
+
+    .knoppen-balk {
+        display: flex;
+        gap: 20px;
+        z-index: 10;
+    }
+
+    .krijt-knop {
+        padding: 12px 30px;
+        font-size: 1.2rem;
         font-weight: bold;
-        background-color: #e6f7ff; 
-        border-radius: 4px;
-    }
-
-    .hidden {
-        display: none !important;
-    }
-
-    .terug-button {
-        margin-top: 1.5rem;
-        padding: 10px 20px;
-        font-size: 1rem;
-        background-color: #26890c;
-        color: white;
-        border: none;
-        border-radius: 4px;
+        border: 2px solid black;
+        background-color: white; 
+        color: black;
         cursor: pointer;
+        transition: transform 0.2s, background-color 0.2s;
     }
 
+    .krijt-knop:hover {
+        background-color: #f0f0f0;
+        transform: scale(1.05);
+    }
 </style>

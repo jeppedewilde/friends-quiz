@@ -18,7 +18,9 @@ import EindScherm from '../components/play/EindScherm.astro';
     </div>
     
     <script>
-        const ws = new WebSocket('ws://localhost:8081');
+        // @ts-nocheck
+        // const ws = new WebSocket('ws://localhost:8081');
+        const ws = new WebSocket(`ws://${window.location.hostname}:8081`);
 
         // mag standaard niet antwoorden
         let magAntwoorden = false;
@@ -68,17 +70,6 @@ import EindScherm from '../components/play/EindScherm.astro';
                     document.body.classList.remove('scherm-goed', 'scherm-fout');
 
                     toonScherm('gameScherm');
-
-                    // verberg alles standaard
-                    // document.getElementById('wachtScherm')?.classList.add('hidden');
-                    // document.querySelector('.antwoord-knoppen').classList.add('hidden');
-                    // document.getElementById('openVraagContainer').classList.add('hidden');
-                    // document.getElementById('uitslagScherm').classList.add('hidden');
-                    // document.getElementById('eindScherm').classList.add('hidden');
-                    
-                    // document.getElementById('kijkNaarScherm').textContent = 'Kijk naar het grote scherm!';
-                    // document.getElementById('gameScherm')?.classList.remove('hidden');
-                    // document.body.classList.remove('scherm-goed', 'scherm-fout');
                     
                     // laat de juiste besturing zien op basis van het type vraag
                     if (envelop.vraagSoort === 'open_seizoen') {
@@ -94,30 +85,60 @@ import EindScherm from '../components/play/EindScherm.astro';
                 else if (envelop.type === 'ronde_uitslag_speler') {
                     toonScherm('uitslagScherm');
 
-                    // // verberg controller component
-                    // document.getElementById('gameScherm')?.classList.add('hidden');
-
-                    // // laat uitslag component zien
-                    // document.getElementById('uitslagScherm')?.classList.remove('hidden');
-
                     const tekst = document.getElementById('uitslagTekst');
+                    const succesGif = document.getElementById('succesGif'); 
+                    const foutGif = document.getElementById('foutGif'); // NIEUW: Haal de fout-GIF op
 
                     if (envelop.isGoed) {
-                        tekst.innerHTML = `GOED!<br><br>Jouw score: <strong>${envelop.jouwScore} punten</strong>`;
+                        tekst.innerHTML = `Could you BE any smarter?<br><br>Score: <strong>${envelop.jouwScore}</strong>`;
                         document.body.classList.add('scherm-goed');
+                        
+                        // laat succes zien, verstop fout
+                        if (succesGif) succesGif.classList.remove('hidden'); 
+                        if (foutGif) foutGif.classList.add('hidden');
                     } else {
-                        tekst.innerHTML = `FOUT!<br><br>Jouw score: <strong>${envelop.jouwScore} punten</strong>`;
+                        tekst.innerHTML = `NOOOOOOOOO!<br><br>Score: <strong>${envelop.jouwScore}</strong>`;
                         document.body.classList.add('scherm-fout');
+                        
+                        // laat fout zien, verstop succes
+                        if (succesGif) succesGif.classList.add('hidden'); 
+                        if (foutGif) foutGif.classList.remove('hidden'); 
                     }
                 }
                 else if (envelop.type === 'eindscore') {
-                    // document.getElementById('gameScherm')?.classList.add('hidden');
-                    // document.getElementById('wachtScherm')?.classList.add('hidden');
-                    // document.getElementById('uitslagScherm')?.classList.add('hidden');
+                    // Reset de achtergrondkleur
                     document.body.classList.remove('scherm-goed', 'scherm-fout');
-                    toonScherm ('eindScherm');
+                    toonScherm('eindScherm');
 
-                    // document.getElementById('eindScherm')?.classList.remove('hidden');
+                    // haal naam op en zoek bijbehorende score
+                    const mijnNaam = document.getElementById('spelerNaam').value.trim();
+                    const mijnScore = envelop.scores[mijnNaam];
+
+                    // zet de score in de tekst
+                    const eindScoreTekst = document.getElementById('eindScoreTekst');
+                    if (eindScoreTekst) {
+                        eindScoreTekst.innerHTML = `Jouw totale score: <strong>${mijnScore} punten</strong>`;
+                    }
+
+                    // array met gifs
+                    const eindGifs = [
+                        "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXcyNWl6N2U0dHE0ejU3YXhvanNoa2J0aXBmOGRqcnE2amZsZmpkOCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/31lPv5L3aIvTi/giphy.gif", 
+                        "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXcyNWl6N2U0dHE0ejU3YXhvanNoa2J0aXBmOGRqcnE2amZsZmpkOCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/TIG6XFVuOriidsTsdu/giphy.gif", 
+                        "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3ZTNhM3Z2NnExNHlyMGF3aTF5MnNjNG5ueG9xcW9tMjl4b3psNHJtNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Gf3fU0qPtI6uk/giphy.gif", 
+                        "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3eHNtczg5N3B5N29rcW90Y3o3NjBrM3NuaHd3dzJlZGZzaTd4YjZqcCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/XGhTPVMgzLv7s2TOE6/giphy.gif",
+                        "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3MGllbHU5YThpb2R3emp4bHFhMzhmcnVsMmRtb3Uxb2tzb21sYmk2cCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lPoxtQlcX30doRbHTN/giphy.gif",
+                        "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3OHljYmk2emoxejdiNXZmOW1xemFpdGpjbTByc3oyaGNlc2M5ZjdydiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/JGH2CwqB4oqGc/giphy.gif"
+                    ];
+
+                    // kies random gif
+                    const randomGetal = Math.floor(Math.random() * eindGifs.length);
+                    
+                    // laat gekozen gif zien
+                    const eindGifElement = document.getElementById('eindGif');
+                    if (eindGifElement) {
+                        eindGifElement.src = eindGifs[randomGetal];
+                        eindGifElement.classList.remove('hidden');
+                    }
                 }
                 else if (envelop.type === 'ga_naar_lobby') {
                     // reset de achtergrondkleuren van het uitslag-scherm
@@ -128,7 +149,7 @@ import EindScherm from '../components/play/EindScherm.astro';
                 else if (envelop.type === 'tussenstand') {
                     document.body.classList.remove('scherm-goed', 'scherm-fout');
                     
-                    document.getElementById('wachtScherm').textContent = 'Tussenstand op het grote scherm!';
+                    document.getElementById('wachtTekst').textContent = 'Tussenstand op het grote scherm!';
                     toonScherm('wachtScherm');
                 }
 
@@ -170,7 +191,7 @@ import EindScherm from '../components/play/EindScherm.astro';
                 console.log('Antwoord verzonden:', envelop);
 
                 // verander tekst zodat speler weet dat antwoord is verzonden
-                document.getElementById('wachtScherm').textContent = 'Antwoord verzonden! Wachten op de rest...';
+                document.getElementById('wachtTekst').textContent = 'Antwoord verzonden!';
                 toonScherm('wachtScherm');
             });
         });
@@ -190,7 +211,7 @@ import EindScherm from '../components/play/EindScherm.astro';
             };
             ws.send(JSON.stringify(envelop));
             
-            document.getElementById('wachtScherm').textContent = 'Antwoord verzonden! Wachten op de rest...';
+            document.getElementById('wachtTekst').textContent = 'Antwoord verzonden!';
             toonScherm('wachtScherm');
         });
     </script>
@@ -238,9 +259,11 @@ import EindScherm from '../components/play/EindScherm.astro';
         background-color: var(--secondary-color) !important;
         transition: background-color 0.3s;
     }
+
     .scherm-fout {
         background-color: #e21b3c; 
         color: white;
         transition: background-color 0.3s;
     }
 </style>
+

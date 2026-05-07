@@ -2,27 +2,23 @@
     
     <h2 id="uitslagTekst" class="uitslag-tekst">Uitslag...</h2>
 
-    <!-- De Goed GIF -->
     <div id="succesGif" class="hidden gif-box">
         <div class="tenor-gif-embed" data-postid="8624671429702300547" data-share-method="host" data-aspect-ratio="1" data-width="100%">
             <a href="https://tenor.com/view/friends-friends-tv-tv-friends-david-schwimmer-ross-geller-gif-8624671429702300547">Friends Friends Tv GIF</a>
         </div> 
     </div>
 
-    <!-- De Fout GIF (NIEUW!) -->
     <div id="foutGif" class="hidden gif-box">
         <div class="tenor-gif-embed" data-postid="372245784238604745" data-share-method="host" data-aspect-ratio="1" data-width="100%">
             <a href="https://tenor.com/view/friends-friends-tv-friendstv-tvfriends-tv-friends-gif-372245784238604745">Friends Friends Tv GIF</a>
         </div>
     </div>
 
-    <!-- Eén keer inladen is genoeg voor beide plaatjes -->
     <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
 </div>
 
 <style>
-    /* Centreert alles perfect in het midden */
     .uitslag-container {
         display: flex;
         flex-direction: column;
@@ -37,17 +33,16 @@
     .uitslag-tekst {
         font-size: 2rem;
         text-align: center;
-        color: white; /* Tekst is altijd wit, valt mooi op tegen rood/groen */
+        color: white; 
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        margin-bottom: 30px; /* Ruimte tussen tekst en GIF */
+        margin-bottom: 30px; 
     }
 
-    /* Styling voor het GIF-doosje */
     .gif-box {
         width: 100%;
-        max-width: 280px; /* Zorgt dat ie op je telefoon niet over de randen valt */
+        max-width: 280px; 
         border-radius: 12px;
-        overflow: hidden; /* Zorgt dat de randjes van de GIF mooi afronden */
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4); /* Mooie 3D schaduw */
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
     }
 </style>

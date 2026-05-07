@@ -201,36 +201,41 @@ Als ik meer tijd had gehad had ik namelijk veel dieper de styling in willen gaan
 
 # Bronnenlijst
 Content API friends (TMDB)
-https://www.themoviedb.org/tv/1668-friends
+- https://www.themoviedb.org/tv/1668-friends
 
 Web socket API
-https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
-https://medium.com/@leomofthings/building-a-node-js-websocket-server-a-practical-guide-b164902a0c99
-https://www.donnywals.com/setting-up-a-simple-local-web-socket-server/
+- https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
+- https://medium.com/@leomofthings/building-a-node-js-websocket-server-a-practical-guide-b164902a0c99
+- https://www.donnywals.com/setting-up-a-simple-local-web-socket-server/
 
 Web animations API
-https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API
-& Mila
+- https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API
+- & Mila
 
 Week 3
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
-https://javascript.info/websocket
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+- https://javascript.info/websocket
 
 Promises/Async
-https://www.youtube.com/watch?v=li7FzDHYZpc
+- https://www.youtube.com/watch?v=li7FzDHYZpc
 
 Try 
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all & https://www.youtube.com/watch?v=cFTFtuEQ-10 
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all 
+- https://www.youtube.com/watch?v=cFTFtuEQ-10 
 
 How to build a quiz with javascript videos
-https://www.youtube.com/watch?v=riDzcEQbX6k
-https://youtu.be/PBcqGxrr9g8?si=fGxu_nnYj_VEHWnn
-https://youtu.be/6w9cnCC1VI8?si=aDDYX41Ds1mGTTVb
-https://youtu.be/vZe4SvsnLxM?si=UWjnyBzdKVQO96in
+- https://www.youtube.com/watch?v=riDzcEQbX6k
+- https://youtu.be/PBcqGxrr9g8?si=fGxu_nnYj_VEHWnn
+- https://youtu.be/6w9cnCC1VI8?si=aDDYX41Ds1mGTTVb
+- https://youtu.be/vZe4SvsnLxM?si=UWjnyBzdKVQO96in
+
+QR code library
+- https://davidshimjs.github.io/qrcodejs/
+- https://cdnjs.com/libraries/qrcodejs
 
 Border image
-https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/border-image-source
-& Sabrina
+- https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/border-image-source
+- & Sabrina
 
 GIFS & afbeeldingen
 - https://tenor.com/nl/

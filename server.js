@@ -53,6 +53,7 @@ server.on('connection', (socket) => {
     clients.add(socket);
     console.log('Client connected');
 
+    // luister naar berichten van de client
     socket.on('message', async (message) => {
         const binnenkomendeTekst = message.toString();
         console.log(`Ontvangen op server: ${binnenkomendeTekst}`);

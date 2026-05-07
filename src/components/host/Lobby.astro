@@ -33,22 +33,26 @@
     </div>
 </div>
 
-<!-- Laad de qrcode.js library in via een CDN -->
+<!-- qrcode.js library inladen -->
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-<!-- Genereer de QR code -->
+<!-- genereer QR code -->
 <script is:inline>
+    // functie om de qr te maken, wordt meteen uitgevoerd
     (function maakQR() {
         const qrBox = document.getElementById("qrcode");
         
+        // als element nog niet klaar is na 50ms weer proberen
         if (!qrBox) {
             setTimeout(maakQR, 50);
             return;
         }
         
+        // maak de qr code met de URL van de speelpagina
         qrBox.innerHTML = ''; 
         const speelUrl = `http://${window.location.host}/play`;
         
+        // styling qr code
         new QRCode(qrBox, {
             text: speelUrl,
             width: 400,
@@ -73,7 +77,7 @@
         // ga langs elk cast hoofd
         castHoofden.forEach((hoofd, index) => {
             
-            // DE WEB ANIMATIONS API
+            // web animations API
             const springAnimatie = hoofd.animate(
                 [
                     { transform: "translateY(0px)" },

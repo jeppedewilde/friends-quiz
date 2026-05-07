@@ -64,18 +64,18 @@ import EindScherm from '../components/play/EindScherm.astro';
                 
                 const envelop = JSON.parse(data);
 
-                // Als de server zegt dat de naam fout is (leeg of bezet):
+                // als de server zegt dat de naam fout is (leeg of bezet)
                 if (envelop.type === 'login_fout') {
-                    // Laat een simpele pop-up zien met de foutmelding
+                    // pop-up met foutmelding
                     alert(envelop.bericht); 
                 } 
 
-                // Als de server zegt dat alles klopt:
+                // als de server zegt dat alles klopt
                 else if (envelop.type === 'login_succes') {
                     toonScherm('wachtScherm');
                 }
 
-                // Als de server zegt dat het spel is gestart:
+                // als de server zegt dat het spel is gestart
                 else if (envelop.type === 'nieuwe_vraag') {
                     // spelers mogen antwoorden
                     magAntwoorden = true;
@@ -101,7 +101,7 @@ import EindScherm from '../components/play/EindScherm.astro';
 
                     const tekst = document.getElementById('uitslagTekst');
                     const succesGif = document.getElementById('succesGif'); 
-                    const foutGif = document.getElementById('foutGif'); // NIEUW: Haal de fout-GIF op
+                    const foutGif = document.getElementById('foutGif');
 
                     if (envelop.isGoed) {
                         tekst.innerHTML = `Could you BE any smarter?<br><br>Score: <strong>${envelop.jouwScore}</strong>`;
@@ -120,7 +120,7 @@ import EindScherm from '../components/play/EindScherm.astro';
                     }
                 }
                 else if (envelop.type === 'eindscore') {
-                    // Reset de achtergrondkleur
+                    // reset de achtergrondkleur
                     document.body.classList.remove('scherm-goed', 'scherm-fout');
                     toonScherm('eindScherm');
 
@@ -158,12 +158,6 @@ import EindScherm from '../components/play/EindScherm.astro';
                     // reset de achtergrondkleuren van het uitslag-scherm
                     document.body.classList.remove('scherm-goed', 'scherm-fout');
                     
-                    toonScherm('wachtScherm');
-                }
-                else if (envelop.type === 'tussenstand') {
-                    document.body.classList.remove('scherm-goed', 'scherm-fout');
-                    
-                    document.getElementById('wachtTekst').textContent = 'Tussenstand op het grote scherm!';
                     toonScherm('wachtScherm');
                 }
 

@@ -19,8 +19,13 @@ const apiKey = process.env.TMDB_API_KEY;
 
 let huidigJuistAntwoord = "";
 
+// Chatgpt gevraagd waarom mijn links niet werkten op render, die zei dat render port 8081 gebruikt voor health checks, en dat ik daarom een andere port moest gebruiken. Heb ik gedaan, en nu werkt het! Dus ik denk dat dat het probleem was.
+// Render geeft de poort door via process.env.PORT. 
+// Als die niet bestaat (zoals lokaal op je laptop), gebruikt hij 8081.
+const port = process.env.PORT || 8081;
+
 const server = new WebSocketServer({
-    port: 8081
+    port: port
 });
 
 const clients = new Set();
@@ -306,6 +311,4 @@ function stuurUitslag() {
     });
 }
 
-
-
-console.log('WebSocket server is running on ws://localhost:8081');
+console.log(`WebSocket server is running on port: ${port}`);

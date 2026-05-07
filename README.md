@@ -198,6 +198,7 @@ https://www.themoviedb.org/tv/1668-friends
 Web socket API
 https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
 https://medium.com/@leomofthings/building-a-node-js-websocket-server-a-practical-guide-b164902a0c99
+https://www.donnywals.com/setting-up-a-simple-local-web-socket-server/
 
 Web animations API
 https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API
@@ -206,12 +207,14 @@ https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_We
 Week 3
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
 https://javascript.info/websocket
-youtube videos: [links terugzoeken in geschiedenis!]
 
-Promises/Async: https://www.youtube.com/watch?v=li7FzDHYZpc
-Try: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all & https://www.youtube.com/watch?v=cFTFtuEQ-10 
+Promises/Async
+https://www.youtube.com/watch?v=li7FzDHYZpc
 
-How to build a quiz with javascript:
+Try 
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all & https://www.youtube.com/watch?v=cFTFtuEQ-10 
+
+How to build a quiz with javascript videos
 https://www.youtube.com/watch?v=riDzcEQbX6k
 https://youtu.be/PBcqGxrr9g8?si=fGxu_nnYj_VEHWnn
 https://youtu.be/6w9cnCC1VI8?si=aDDYX41Ds1mGTTVb

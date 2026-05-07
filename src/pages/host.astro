@@ -26,7 +26,7 @@ import VraagScherm from '../components/host/VraagScherm.astro';
         // Gebruik lokaal poort 8081, en gebruik online de Render URL
         const wsUrl = isLokaal 
         ? `ws://${window.location.hostname}:8081` 
-        : `wss://the-one-with-the-quiz.onrender.com`;
+        : `wss://friends-quiz-backend-wsx2.onrender.com`;
 
         // Maak de verbinding!
         const ws = new WebSocket(wsUrl);
@@ -348,9 +348,5 @@ import VraagScherm from '../components/host/VraagScherm.astro';
     body {
         overflow-x: hidden;
         overflow-y: hidden;
-    }
-
-    .host-optie-knop {
-        font-family: 'Courier New', Courier, monospace;
     }
 </style>

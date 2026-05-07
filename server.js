@@ -242,19 +242,8 @@ server.on('connection', (socket) => {
                 clients.forEach((client) => {
                     if (client.readyState === 1) client.send(lobbyEnvelop);
                 });
-            } else if (envelop.type === 'vraag_tussenstand') {
-                console.log('De host laat de tussenstand zien');
-                
-                const tussenstandEnvelop = JSON.stringify({
-                    type: 'tussenstand',
-                    scores: scores
-                });
-
-                clients.forEach((client) => {
-                    if (client.readyState === 1) client.send(tussenstandEnvelop);
-                });
-            }
-
+            } 
+        // catch voor als er iets mis gaat bij het lezen van de envelop
         } catch (error) {
             console.error(`Kan envelop niet lezen: ${binnenkomendeTekst}`);
         }

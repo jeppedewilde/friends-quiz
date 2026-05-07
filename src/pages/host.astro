@@ -24,7 +24,9 @@ import VraagScherm from '../components/host/VraagScherm.astro';
         const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 
         // Gebruik lokaal poort 8081, en gebruik online de Render URL
-        const wsUrl = isLokaal ? `ws://${window.location.hostname}:8081` : `${wsProtocol}//${window.location.host}`;
+        const wsUrl = isLokaal 
+        ? `ws://${window.location.hostname}:8081` 
+        : `wss://https://the-one-with-the-quiz.onrender.com`;
 
         // Maak de verbinding!
         const ws = new WebSocket(wsUrl);
